@@ -1,0 +1,10 @@
+$path: '~@/assets/fonts/';
+
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src:
+    url($path + 'Open-Sans-Regular.woff') format('woff'),
+    url($path + 'Open-Sans-Regular.woff2') format('woff2');
+}

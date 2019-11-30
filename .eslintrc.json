@@ -1,0 +1,294 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "parserOptions": {
+    // import('./file.ext');
+    "parser": "babel-eslint"
+  },
+  "extends": ["airbnb-base", "plugin:vue/recommended"],
+  "globals": {
+    // Big(0.0001) using big.js library
+    "Big": true
+  },
+  "overrides": [
+    {
+      "files": ["*.vue"],
+      /*
+        Component.vue
+
+        54 }
+        55
+        56 </style> 
+        57 Здесь никогда не будет кода
+
+        Линтер говорил, что там должна быть пустая строка
+      */
+      "rules": {"eol-last": "off"}
+    },
+    {
+      "files": ["*.test.js"],
+      /*
+        --> describe('TheTasksCompleted', () => {
+          --> test(() => {
+            const wrapper = shallowMount(TheTasksCompleted);
+            --> expect(wrapper.isVueInstance()).toBe(true);
+          });
+        });
+
+        Said that this and some other functions not defined
+      */
+      "rules": {"no-undef": "off"}
+    }
+  ],
+  "rules": {
+    "no-plusplus": "off",
+    /*
+      const storData = this.cartItemsStorData.find(
+        (storData) => storData.id === this.data.id,
+      );
+
+      Говорил, что storData уже определен в верхней области видимости,
+      и приходилось давать другое неопрятное имя
+    */
+    "no-shadow": "off",
+    /*
+      const id = this.data.id;
+
+      Говорил, что в таком случае надо применить деструктурирование
+    */
+    "prefer-destructuring": "off",
+    /*
+      <component
+        :is="RptItem"
+        v-for="data in itemsData"
+      />
+      computed: {
+        RptItem() {
+          if (this.itemsData) return () => import('./RptItem.vue');
+        },
+      },
+
+      Говорил, что в конце вычисляемого свойства должно возвращаться значение
+    */
+    "consistent-return": "off",
+    /*
+      resetSidebarScrollPosition(sidebar) {
+        sidebar.scrollTop = 0;
+      },
+
+      Говорил, что нельзя присвать значение свойству объекта, который
+      содержит параметр функции
+    */
+    "no-param-reassign": "off",
+    /*
+      imgUrlInSrcset(name, ext) {
+        return require(`./img/${name}.${ext}`);
+      },
+    */
+    "global-require": "off",
+    /*
+      grid:
+        'location shops . to-buyers . projects . call . notifications . enter . registration .' 39.36px
+        / 245px auto 10px auto 10px auto 1fr auto 20px auto 20px auto 10px auto 4px;
+
+      А еще в редакторе есть ограничительная линия
+    */
+    "max-len": "off",
+    /*
+      .find((data) => data.id === storData.id);
+      Лучше чем
+      .find(data => data.id === storData.id);
+      
+      Скобки вокруг единственного параметра стрелочной функции обязательны.
+      Легче опознать ее пробегаясь глазами по коду
+    */
+    "arrow-parens": ["error", "always"],
+    /*
+      plugins: [createPersistedState({
+        paths: [ 'auth' ],
+      })]
+    */
+    "array-bracket-spacing": "off",
+    /*
+      components: { UserIcon, BitcoinLogo, ArrowRightQuit, SettingsIcon },
+    */
+    "object-curly-newline": "off",
+    /*
+      const maxPageScrollOffsetToComfortablyComeBackToTopByManualScrolling
+        = pageHeight * 4;
+      if (
+        pageScrollOffset
+        > maxPageScrollOffsetToComfortablyComeBackToTopByManualScrolling
+      ) {
+        ...
+      }
+      Говорил, что операторы '=' и '>' не должны быть на новой строке. Если
+      укоротить имена переменных, то код не будет таким понятным
+    */
+    "operator-linebreak": "off",
+    "no-use-before-define": "off",
+    /*
+      mixins: [vueComponentReset(() => ({**error here**
+        iconName: 'menu',
+        iconText: 'меню',
+      }))],
+    */
+    "arrow-body-style": "off",
+    "indent": ["error", 2, {
+      /*
+        ${
+          data.class === 'show-catalog'
+            ? '@click="showCatalog"'
+            : ''
+        }
+
+        Говорил, что отступы в этом случае неправильные
+      */
+      "ignoredNodes": ["TemplateLiteral"], 
+      /*
+        Говорил, что комментарии должны быть на одном уровне по отсупам с другим
+        кодом. Причина есть в комментарии 1 build конфига webpack
+      */
+      "ignoreComments": true
+    }],
+    /*
+      imgUrlInSrcset(name, ext) {
+        return require(`./img/${name}.${ext}`);
+      },
+
+      Говорил, что внутри вызова require должны быть только строковые литералы
+    */
+    "import/no-dynamic-require": "off",
+    /*
+      Говорил, что все пакеты, импорированные в конфиг webpack
+      с помощью require, должны быть перечисленны в dependencies,
+      а не devDependencies
+    */
+    "import/no-extraneous-dependencies": "off",
+    /*
+      <component
+        :is="RptCartItem"
+        v-for="data in cartItemsData"
+        :cartItemsData="cartItemsData"
+      />
+
+      Входные параметры являются свойствами объекта, а написание их имен в
+      camelCase является общепринятым. Также SFC позволяют писать атрибуты в
+      camelCase. Говорил, что надо писать их через тире
+    */
+    "vue/attribute-hyphenation": "off",
+    /*
+      * Компонент загружается только если загрузились данные,
+      относящиеся к нему
+
+      <component
+        :is="RptItem"
+        v-for="data in itemsData"
+      />
+      RptItem() {
+        if (this.itemsData) return () => import('./RptItem.vue');
+      },
+      
+      Говорил, что вычисляемое свойство должно возвращать значение
+    */
+    "vue/return-in-computed-property": "off",
+    // <p class="player">2</p>
+    "vue/singleline-html-element-content-newline": "off",
+    /*
+      <div
+        v-if="usernameValidationText"
+        class="sing-up__validation"
+      >{{ usernameValidationText }}</div>
+
+      Because couldn't configure the webpack to make it look like this:
+
+      <div
+        v-if="usernameValidationText"
+        class="sing-up__validation"
+      >
+        {{ usernameValidationText }}
+      </div>
+    */
+    "vue/multiline-html-element-content-newline": "off",
+    /*
+      <div
+        @click.prevent="close"
+        class="modal__background"
+      ></div>
+
+      Said that the attribute class should go before the @click attribute.
+      Too much extra work
+    */
+    "vue/attributes-order": "off",
+    /*
+      size: {
+        type: Number,
+        required: false,
+      },
+      
+      Said that you need to set a default value
+    */
+    "vue/require-default-prop": "off",
+    "vue/html-indent": ["error", 2, {
+      /*
+        <template>
+
+        <div class="catalog-cont">
+          <div class="catalog"></div>
+        </div>
+
+        </template>
+
+        Говорил писать таким образом:
+
+        <template>
+          <div class="catalog-cont">
+            <div class="catalog"></div>
+          </div>
+        </template>
+
+        * Пустые строки убраны для наглядности
+      */
+      "baseIndent": 0
+    }],
+    "vue/html-self-closing": ["error", {
+      "html": {
+        /*
+          <a
+            href="##"
+            class="link-mask"
+          ></a>
+
+          Чтобы после автодополнения не преобразовывать тэги некоторых элементов 
+          в самозакрывающиеся лишний раз.
+        */
+        "normal": "never",
+        "component": "always"
+      },
+      /*
+        <svg>
+          <use></use>
+        </svg>
+
+        Говорил, что use должен быть самозакрывающимся. Устанавливается, что
+        элементы, относящиеся к svg могут быть самозакрывющимися и наоборот
+      */
+      "svg": "never"
+    }]
+  },
+  "settings": {
+    // import '@/path/file.ext';
+    "import/resolver": {
+      "webpack": {
+        /*
+          Путь к конфигу, в котором находится опция resolve, с помощью
+          которой линтер сможет выяснить, какие сокращения позволительны
+          при импорте, используя eslint-import-resolver-webpack
+        */
+        "config": "webpack.common.js"
+      }
+    }
+  }
+}

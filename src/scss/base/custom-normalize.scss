@@ -1,0 +1,65 @@
+::placeholder {
+  color: inherit;
+  opacity: 1;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+svg {
+  fill: currentColor;
+}
+
+button {
+  padding: 0;
+  color: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  background-color: inherit;
+  border: 0;
+  outline: none;
+  cursor: pointer;
+}
+
+p {
+  margin: 0;
+}
+
+input {
+  padding: 0;
+  margin: 0;
+  color: inherit;
+  font-weight: inherit;
+  background-color: inherit;
+  border: 0;
+  outline: none;
+}
+
+// Убирает стрелки у input типа number 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  margin: 0;
+  -webkit-appearance: none;
+}
+
+// Это тоже убирает стрелки 
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+textarea {
+  padding: 0;
+  color: inherit;
+  background-color: inherit;
+  border: 0;
+  outline: none;
+  resize: none;
+}
+
+ul, ol {
+  padding: 0;
+  margin: 0;
+  list-style-position: inside;
+}
