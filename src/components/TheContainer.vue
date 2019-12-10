@@ -15,9 +15,9 @@ export default {
 <style lang="scss">
 
 .container {
-  width: 100%;
   flex: 1 1 0;
   display: flex;
+  width: 100%;
   flex-direction: column;
 
   @media (min-width: $break-tablet) {

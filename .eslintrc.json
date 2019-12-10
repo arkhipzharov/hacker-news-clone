@@ -21,9 +21,9 @@
         54 }
         55
         56 </style> 
-        57 Здесь никогда не будет кода
+        57 Code will never be here
 
-        Линтер говорил, что там должна быть пустая строка
+        Said there should be an empty string
       */
       "rules": {"eol-last": "off"}
     },
@@ -40,6 +40,24 @@
         Said that this and some other functions not defined
       */
       "rules": {"no-undef": "off"}
+    },
+    {
+      "files": ["*.config.js"],
+      "rules": {
+        /*
+          'postcss-import': {},
+          'postcss-preset-env': {},
+          'cssnano': {},
+        */
+        "quote-props": "off",
+        /*
+          module.exports = {
+            ...
+          };
+          Newline here not needed
+        */
+        "eol-last": "off"
+      }
     }
   ],
   "rules": {
@@ -49,14 +67,14 @@
         (storData) => storData.id === this.data.id,
       );
 
-      Говорил, что storData уже определен в верхней области видимости,
-      и приходилось давать другое неопрятное имя
+      Said storData is already defined in the upper scope,
+      and had to give another untidy name
     */
     "no-shadow": "off",
     /*
       const id = this.data.id;
 
-      Говорил, что в таком случае надо применить деструктурирование
+      Said that in this case it is necessary to apply destructuring
     */
     "prefer-destructuring": "off",
     /*
@@ -70,7 +88,8 @@
         },
       },
 
-      Говорил, что в конце вычисляемого свойства должно возвращаться значение
+      Said that at the end of the calculated property, the value should be
+      returned
     */
     "consistent-return": "off",
     /*
@@ -78,8 +97,8 @@
         sidebar.scrollTop = 0;
       },
 
-      Говорил, что нельзя присвать значение свойству объекта, который
-      содержит параметр функции
+      Said that you can’t assign value to the property of an object that
+      contains function parameter
     */
     "no-param-reassign": "off",
     /*
@@ -93,7 +112,7 @@
         'location shops . to-buyers . projects . call . notifications . enter . registration .' 39.36px
         / 245px auto 10px auto 10px auto 1fr auto 20px auto 20px auto 10px auto 4px;
 
-      А еще в редакторе есть ограничительная линия
+      And in the editor there is a limit line
     */
     "max-len": "off",
     /*
@@ -101,8 +120,8 @@
       Лучше чем
       .find(data => data.id === storData.id);
       
-      Скобки вокруг единственного параметра стрелочной функции обязательны.
-      Легче опознать ее пробегаясь глазами по коду
+      Brackets around a single parameter of the arrow function are required.
+      It’s easier to identify function by looking through the code
     */
     "arrow-parens": ["error", "always"],
     /*
@@ -124,15 +143,16 @@
       ) {
         ...
       }
-      Говорил, что операторы '=' и '>' не должны быть на новой строке. Если
-      укоротить имена переменных, то код не будет таким понятным
+
+      Said that the operators '=' and '>' should not be on a new line. If we
+      shorten the variable names, then the code will not be so clear
     */
     "operator-linebreak": "off",
     "no-use-before-define": "off",
     /*
       mixins: [vueComponentReset(() => ({**error here**
         iconName: 'menu',
-        iconText: 'меню',
+        iconText: 'menu',
       }))],
     */
     "arrow-body-style": "off",
@@ -144,27 +164,21 @@
             : ''
         }
 
-        Говорил, что отступы в этом случае неправильные
+        Said that the indents in this case are incorrect
       */
-      "ignoredNodes": ["TemplateLiteral"], 
-      /*
-        Говорил, что комментарии должны быть на одном уровне по отсупам с другим
-        кодом. Причина есть в комментарии 1 build конфига webpack
-      */
-      "ignoreComments": true
+      "ignoredNodes": ["TemplateLiteral"]
     }],
     /*
       imgUrlInSrcset(name, ext) {
         return require(`./img/${name}.${ext}`);
       },
 
-      Говорил, что внутри вызова require должны быть только строковые литералы
+      Said that only string literals should be inside the require call
     */
     "import/no-dynamic-require": "off",
     /*
-      Говорил, что все пакеты, импорированные в конфиг webpack
-      с помощью require, должны быть перечисленны в dependencies,
-      а не devDependencies
+      Said that all packages imported into the webpack config using require,
+      should be listed in dependencies, not devDependencies
     */
     "import/no-extraneous-dependencies": "off",
     /*
@@ -174,26 +188,12 @@
         :cartItemsData="cartItemsData"
       />
 
-      Входные параметры являются свойствами объекта, а написание их имен в
-      camelCase является общепринятым. Также SFC позволяют писать атрибуты в
-      camelCase. Говорил, что надо писать их через тире
+      Input parameters are properties of the object, and the spelling of their
+      names in camelCase is generally accepted. SFC also allows you to write
+      attributes in camelCase. Said that you need to write them through a
+      dash
     */
     "vue/attribute-hyphenation": "off",
-    /*
-      * Компонент загружается только если загрузились данные,
-      относящиеся к нему
-
-      <component
-        :is="RptItem"
-        v-for="data in itemsData"
-      />
-      RptItem() {
-        if (this.itemsData) return () => import('./RptItem.vue');
-      },
-      
-      Говорил, что вычисляемое свойство должно возвращать значение
-    */
-    "vue/return-in-computed-property": "off",
     // <p class="player">2</p>
     "vue/singleline-html-element-content-newline": "off",
     /*
@@ -241,15 +241,13 @@
 
         </template>
 
-        Говорил писать таким образом:
+        Said to write in this way
 
         <template>
           <div class="catalog-cont">
             <div class="catalog"></div>
           </div>
         </template>
-
-        * Пустые строки убраны для наглядности
       */
       "baseIndent": 0
     }],
@@ -261,8 +259,8 @@
             class="link-mask"
           ></a>
 
-          Чтобы после автодополнения не преобразовывать тэги некоторых элементов 
-          в самозакрывающиеся лишний раз.
+          In order not to convert tags of some elements after autocompletion to
+          self-closing once again
         */
         "normal": "never",
         "component": "always"
@@ -272,8 +270,7 @@
           <use></use>
         </svg>
 
-        Говорил, что use должен быть самозакрывающимся. Устанавливается, что
-        элементы, относящиеся к svg могут быть самозакрывющимися и наоборот
+        Said that use should be self-closing
       */
       "svg": "never"
     }]
@@ -283,11 +280,11 @@
     "import/resolver": {
       "webpack": {
         /*
-          Путь к конфигу, в котором находится опция resolve, с помощью
-          которой линтер сможет выяснить, какие сокращения позволительны
-          при импорте, используя eslint-import-resolver-webpack
+          Path to the config where the resolve option is located, using
+          which, linter can figure out which abbreviations are allowed
+          upon import using eslint-import-resolver-webpack
         */
-        "config": "webpack.common.js"
+        "config": "webpack.base.js"
       }
     }
   }

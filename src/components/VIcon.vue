@@ -2,8 +2,7 @@
 
 <svg :viewBox="viewBox">
   <!--
-    на MDN написано, что испоьзование xlink:href не рекомендуется, поэтому
-    используется href
+    MDN says that using xlink:href is not recommended, therefore used href
   -->
   <use :href="'#' + href"></use>
 </svg>

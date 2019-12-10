@@ -12,8 +12,6 @@ const routes = [
 
 const router = new VueRouter({
   routes,
-  // сбрасывает позицию вертикального и горизонтального скролла страницы при
-  // перемещении на другую
   scrollBehavior() {
     return { x: 0, y: 0 };
   },

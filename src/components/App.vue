@@ -46,7 +46,7 @@ body {
   height: 100%;
   min-width: 320px;
   color: $text-white;
-  font-family: $font-open-sans;
+  font-family: $font-roboto-slab;
   font-weight: 600;
   background-color: $block-black;
 

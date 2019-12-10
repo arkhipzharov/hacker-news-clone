@@ -37,14 +37,14 @@ input {
   outline: none;
 }
 
-// Убирает стрелки у input типа number 
+// Убирает стрелки у input типа number
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   margin: 0;
   -webkit-appearance: none;
 }
 
-// Это тоже убирает стрелки 
+// Это тоже убирает стрелки
 input[type=number] {
   -moz-appearance: textfield;
 }

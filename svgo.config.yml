@@ -1,5 +1,3 @@
-# Конфиг взят из интернета и было исследовано только несколько опций
-
 plugins:
   - cleanupAttrs: true
   - removeDoctype: true

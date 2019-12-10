@@ -1,10 +1,8 @@
 const merge = require('webpack-merge');
-const baseConfig = require('./webpack.common.js');
+const baseConfig = require('./webpack.base.js');
 
 module.exports = merge(baseConfig, {
   devServer: {
-    // При запланированном прерывании подключения в консоли браузера
-    // показывалось нежелательное уведомление
     clientLogLevel: 'none',
   },
   module: {

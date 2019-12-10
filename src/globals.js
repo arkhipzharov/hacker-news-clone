@@ -15,13 +15,13 @@ Vue.prototype.$moment = moment;
 const packageComponents = { VRuntimeTemplate, Fragment };
 
 Object.keys(packageComponents).forEach((compName) => {
-  // Сделать глобальными компоненты, взятые из пакетов webpack
   Vue.component(compName, packageComponents[compName]);
 });
 
 const requireComponent = require.context(
-  // Импортировать компоненты, находящиеся в папке components
-  // и потом учитывать их удаление, перемещение и изменение
+  // Import the components located in the components folder, as well as the
+  // name of which begins with the letter v, and then consider their removal,
+  // movement and change
   './components', false, /V[A-Z]\w+\.vue$/,
 );
 
@@ -32,7 +32,5 @@ requireComponent.keys().forEach((fileName) => {
       fileName.split('/').pop().replace(/\.\w+$/, ''),
     ),
   );
-  // Сделать глобальными компоненты, находящиеся в папке components, а
-  // также имя которых начинается с префикса V
   Vue.component(componentName, componentConfig.default || componentConfig);
 });

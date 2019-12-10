@@ -1,14 +1,13 @@
-// Палитра цветов проекта
+// Color pallette
 
 $white: #FFFFFF;
 
 $black: #000000;
 
 /*
-  Часто используемые переменные для конечного применения, содержащие
-  частично или полностью цвета, взятые из переменных основной палитры.
-  Такой подход позволяет не менять название переменной в самом коде,
-  если нужно изменить цвет при его подборе
+  End-use variables containing partially or fully colors taken from variables
+  in the palette. This approach allows you to not change the name of the
+  variable in the code itself if you need to change the color when choosing it
 */
 
 $text-white: $white;
@@ -19,16 +18,16 @@ $block-white: $white;
 
 $block-black: $black;
 
-// Связанные с тенями
+// Shadows
 
 $shadow: $black;
 
-// Связанные с медиа запросами и разметкой, зависимой от них
+// Media queries
 
 $break-tablet: 768px;
 $break-pc: 992px;
 
-// Связанные со шрифтами
+// Fonts
 
 $font-fallback: Arimo, Arial, sans-serif;
-$font-open-sans: 'Open Sans', $font-fallback;
+$font-roboto-slab: 'Roboto Slab', $font-fallback;

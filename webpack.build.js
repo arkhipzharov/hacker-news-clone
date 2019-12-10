@@ -2,11 +2,9 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const merge = require('webpack-merge');
-const baseConfig = require('./webpack.common.js');
+const baseConfig = require('./webpack.base.js');
 
 module.exports = merge(baseConfig, {
-  // Показывалось предупреждение о превышенном размере js и css файлов
-  // в бандле
   performance: { hints: false },
   optimization: {
     minimizer: [
@@ -38,8 +36,6 @@ module.exports = merge(baseConfig, {
           {
             loader: 'sass-resources-loader',
             options: {
-              // Сделать содержимое этих файлов доступным для каждого SFC
-              // без их импорта
               resources: [
                 './src/scss/helpers/variables.scss',
                 './src/scss/helpers/mixins/*.scss',
@@ -93,7 +89,6 @@ module.exports = merge(baseConfig, {
           {
             loader: 'svg-sprite-loader',
             options: {
-              // Добавляет отдельный файл svg спрайта в бандл
               extract: true,
             },
           },

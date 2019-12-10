@@ -1,6 +1,6 @@
 <template>
 
-<button class="btn">
+<button class="v-button">
   <slot></slot>
 </button>
 
@@ -14,7 +14,7 @@ export default {
 </script>
 <style lang="scss">
 
-.btn {
+.v-button {
 
 }
 
