@@ -3,11 +3,11 @@
     "browser": true,
     "es6": true
   },
-  "parserOptions": {
-    // import('./file.ext');
-    "parser": "babel-eslint"
-  },
-  "extends": ["airbnb-base", "plugin:vue/recommended"],
+  "extends": [
+    "airbnb-base",
+    "plugin:vue/recommended",
+    "plugin:prettier/recommended"
+  ],
   "globals": {
     // Big(0.0001) using big.js library
     "Big": true
@@ -17,15 +17,17 @@
       "files": ["*.vue"],
       /*
         Component.vue
-
         54 }
         55
-        56 </style> 
+        56 </style>
         57 Code will never be here
 
         Said there should be an empty string
       */
-      "rules": {"eol-last": "off"}
+      "rules": {
+        "eol-last": "off",
+        "indent": "off"
+      }
     },
     {
       "files": ["*.test.js"],
@@ -39,7 +41,7 @@
 
         Said that this and some other functions not defined
       */
-      "rules": {"no-undef": "off"}
+      "rules": { "no-undef": "off" }
     },
     {
       "files": ["*.config.js"],
@@ -54,6 +56,7 @@
           module.exports = {
             ...
           };
+
           Newline here not needed
         */
         "eol-last": "off"
@@ -63,35 +66,11 @@
   "rules": {
     "no-plusplus": "off",
     /*
-      const storData = this.cartItemsStorData.find(
-        (storData) => storData.id === this.data.id,
-      );
-
-      Said storData is already defined in the upper scope,
-      and had to give another untidy name
-    */
-    "no-shadow": "off",
-    /*
       const id = this.data.id;
 
       Said that in this case it is necessary to apply destructuring
     */
     "prefer-destructuring": "off",
-    /*
-      <component
-        :is="RptItem"
-        v-for="data in itemsData"
-      />
-      computed: {
-        RptItem() {
-          if (this.itemsData) return () => import('./RptItem.vue');
-        },
-      },
-
-      Said that at the end of the calculated property, the value should be
-      returned
-    */
-    "consistent-return": "off",
     /*
       resetSidebarScrollPosition(sidebar) {
         sidebar.scrollTop = 0;
@@ -102,12 +81,7 @@
     */
     "no-param-reassign": "off",
     /*
-      imgUrlInSrcset(name, ext) {
-        return require(`./img/${name}.${ext}`);
-      },
-    */
-    "global-require": "off",
-    /*
+      TheMenu.vue
       grid:
         'location shops . to-buyers . projects . call . notifications . enter . registration .' 39.36px
         / 245px auto 10px auto 10px auto 1fr auto 20px auto 20px auto 10px auto 4px;
@@ -117,23 +91,13 @@
     "max-len": "off",
     /*
       .find((data) => data.id === storData.id);
-      Лучше чем
+      Better than
       .find(data => data.id === storData.id);
-      
+
       Brackets around a single parameter of the arrow function are required.
       It’s easier to identify function by looking through the code
     */
     "arrow-parens": ["error", "always"],
-    /*
-      plugins: [createPersistedState({
-        paths: [ 'auth' ],
-      })]
-    */
-    "array-bracket-spacing": "off",
-    /*
-      components: { UserIcon, BitcoinLogo, ArrowRightQuit, SettingsIcon },
-    */
-    "object-curly-newline": "off",
     /*
       const maxPageScrollOffsetToComfortablyComeBackToTopByManualScrolling
         = pageHeight * 4;
@@ -148,7 +112,6 @@
       shorten the variable names, then the code will not be so clear
     */
     "operator-linebreak": "off",
-    "no-use-before-define": "off",
     /*
       mixins: [vueComponentReset(() => ({**error here**
         iconName: 'menu',
@@ -156,26 +119,22 @@
       }))],
     */
     "arrow-body-style": "off",
-    "indent": ["error", 2, {
-      /*
-        ${
-          data.class === 'show-catalog'
-            ? '@click="showCatalog"'
-            : ''
-        }
-
-        Said that the indents in this case are incorrect
-      */
-      "ignoredNodes": ["TemplateLiteral"]
-    }],
     /*
-      imgUrlInSrcset(name, ext) {
-        return require(`./img/${name}.${ext}`);
-      },
+      function request(url, options, responseType) {
+        try {
+          ...
+          return parsedData;
+        } catch (errorResponse) {
+          if (!(errorResponse instanceof Error)) {
+            ...
+            return parsedErrorData;
+          }
+        }
+      }
 
-      Said that only string literals should be inside the require call
+      Said that expect to return a value at the end of function
     */
-    "import/no-dynamic-require": "off",
+    "consistent-return": "off",
     /*
       Said that all packages imported into the webpack config using require,
       should be listed in dependencies, not devDependencies
@@ -194,86 +153,65 @@
       dash
     */
     "vue/attribute-hyphenation": "off",
-    // <p class="player">2</p>
-    "vue/singleline-html-element-content-newline": "off",
-    /*
-      <div
-        v-if="usernameValidationText"
-        class="sing-up__validation"
-      >{{ usernameValidationText }}</div>
-
-      Because couldn't configure the webpack to make it look like this:
-
-      <div
-        v-if="usernameValidationText"
-        class="sing-up__validation"
-      >
-        {{ usernameValidationText }}
-      </div>
-    */
-    "vue/multiline-html-element-content-newline": "off",
-    /*
-      <div
-        @click.prevent="close"
-        class="modal__background"
-      ></div>
-
-      Said that the attribute class should go before the @click attribute.
-      Too much extra work
-    */
-    "vue/attributes-order": "off",
-    /*
-      size: {
-        type: Number,
-        required: false,
-      },
-      
-      Said that you need to set a default value
-    */
-    "vue/require-default-prop": "off",
-    "vue/html-indent": ["error", 2, {
-      /*
-        <template>
-
-        <div class="catalog-cont">
-          <div class="catalog"></div>
-        </div>
-
-        </template>
-
-        Said to write in this way
-
-        <template>
-          <div class="catalog-cont">
-            <div class="catalog"></div>
-          </div>
-        </template>
-      */
-      "baseIndent": 0
-    }],
-    "vue/html-self-closing": ["error", {
-      "html": {
+    "indent": [
+      "error",
+      2,
+      {
         /*
-          <a
-            href="##"
-            class="link-mask"
-          ></a>
+          ${
+            data.class === 'show-catalog'
+              ? '@click="showCatalog"'
+              : ''
+          }
 
-          In order not to convert tags of some elements after autocompletion to
-          self-closing once again
+          Said that the indents in this case are incorrect
         */
-        "normal": "never",
-        "component": "always"
-      },
-      /*
-        <svg>
-          <use></use>
-        </svg>
+        "ignoredNodes": ["TemplateLiteral"]
+      }
+    ],
+    "vue/script-indent": [
+      "error",
+      2,
+      {
+        /*
+          <script>
+            export default {};
+          </script>
 
-        Said that use should be self-closing
-      */
-      "svg": "never"
-    }]
+          Instead of
+
+          <script>
+          export default {};
+          </script>
+        */
+        "baseIndent": 1
+      }
+    ],
+    "vue/html-self-closing": [
+      "error",
+      {
+        "html": {
+          /*
+            <a
+              href="##"
+              class="link-mask"
+            ></a>
+
+            In order not to convert tags of some elements after autocompletion
+            to self-closing once again
+          */
+          "normal": "never"
+        },
+        /*
+          <svg>
+            <use></use>
+          </svg>
+
+          Said that use should be self-closing
+        */
+        "svg": "never"
+      }
+    ]
   },
   "settings": {
     // import '@/path/file.ext';

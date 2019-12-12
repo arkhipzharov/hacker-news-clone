@@ -22,14 +22,19 @@ const requireComponent = require.context(
   // Import the components located in the components folder, as well as the
   // name of which begins with the letter v, and then consider their removal,
   // movement and change
-  './components', false, /V[A-Z]\w+\.vue$/,
+  './components',
+  false,
+  /V[A-Z]\w+\.vue$/,
 );
 
 requireComponent.keys().forEach((fileName) => {
   const componentConfig = requireComponent(fileName);
   const componentName = upperFirst(
     camelCase(
-      fileName.split('/').pop().replace(/\.\w+$/, ''),
+      fileName
+        .split('/')
+        .pop()
+        .replace(/\.\w+$/, ''),
     ),
   );
   Vue.component(componentName, componentConfig.default || componentConfig);

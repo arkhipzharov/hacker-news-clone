@@ -1,21 +1,14 @@
 <template>
-
-<button class="v-button">
-  <slot></slot>
-</button>
-
+  <button class="v-button">
+    <slot></slot>
+  </button>
 </template>
+
 <script>
-
-export default {
-
-};
-
+  export default {};
 </script>
+
 <style lang="scss">
-
-.v-button {
-
-}
-
+  .v-button {
+  }
 </style>

@@ -12,9 +12,7 @@ module.exports = {
   },
   resolve: {
     extensions: ['.js', '.vue', '.scss'],
-    plugins: [
-      new DirectoryNamedWebpackPlugin(true),
-    ],
+    plugins: [new DirectoryNamedWebpackPlugin(true)],
     alias: {
       vue$: 'vue/dist/vue.common',
       '@': path.resolve(__dirname, 'src/'),

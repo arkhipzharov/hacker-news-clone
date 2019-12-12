@@ -20,10 +20,8 @@ export default async function request(url, options, responseType) {
     }
     return parsedData;
   } catch (errorResponse) {
-    console.log(errorResponse);
     if (!(errorResponse instanceof Error)) {
       const parsedErrorData = await errorResponse.json();
-      console.log(parsedErrorData);
       return parsedErrorData;
     }
   }

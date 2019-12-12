@@ -1,19 +1,12 @@
 <template>
-
-<header class="header"></header>
-
+  <header class="header"></header>
 </template>
+
 <script>
-
-export default {
-
-};
-
+  export default {};
 </script>
+
 <style lang="scss">
-
-.header {
-
-}
-
+  .header {
+  }
 </style>

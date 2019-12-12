@@ -45,7 +45,7 @@ input::-webkit-inner-spin-button {
 }
 
 // Это тоже убирает стрелки
-input[type=number] {
+input[type='number'] {
   -moz-appearance: textfield;
 }
 
@@ -58,7 +58,8 @@ textarea {
   resize: none;
 }
 
-ul, ol {
+ul,
+ol {
   padding: 0;
   margin: 0;
   list-style-position: inside;

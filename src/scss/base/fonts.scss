@@ -1,21 +1,19 @@
 $path: '~@/assets/fonts/';
 
- @font-face {
+@font-face {
   font-family: Arimo;
   font-style: normal;
   font-weight: 400;
-  src:
-    local('Arimo Regular'), local('Arimo-Regular'),
-    url($path + 'Arimo-Regular.woff') format('woff'),
-    url($path + 'Arimo-Regular.woff2') format('woff2');
+  src: local('Arimo Regular'), local('Arimo-Regular'),
+    url('#{$path}Arimo-Regular.woff') format('woff'),
+    url('#{$path}Arimo-Regular.woff2') format('woff2');
 }
 
 @font-face {
   font-family: 'Roboto Slab';
   font-style: normal;
   font-weight: 400;
-  src:
-    local('Roboto Slab Regular'), local('Roboto-Slab-Regular'),
-    url($path + 'Roboto-Slab-Regular.woff') format('woff'),
-    url($path + 'Roboto-Slab-Regular.woff2') format('woff2');
+  src: local('Roboto Slab Regular'), local('Roboto-Slab-Regular'),
+    url('#{$path}Roboto-Slab-Regular.woff') format('woff'),
+    url('#{$path}Roboto-Slab-Regular.woff2') format('woff2');
 }

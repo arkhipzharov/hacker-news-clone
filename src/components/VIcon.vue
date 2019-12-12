@@ -1,27 +1,24 @@
 <template>
-
-<svg :viewBox="viewBox">
-  <!--
-    MDN says that using xlink:href is not recommended, therefore used href
-  -->
-  <use :href="'#' + href"></use>
-</svg>
-
+  <svg :viewBox="viewBox">
+    <!--
+      MDN says that using xlink:href is not recommended, therefore used href
+    -->
+    <use :href="'#' + href"></use>
+  </svg>
 </template>
+
 <script>
-
-export default {
-  props: {
-    viewBox: {
-      type: String,
-      required: false,
-      default: '0 0 1 1',
+  export default {
+    props: {
+      viewBox: {
+        type: String,
+        required: false,
+        default: '0 0 1 1',
+      },
+      href: {
+        type: String,
+        required: true,
+      },
     },
-    href: {
-      type: String,
-      required: true,
-    },
-  },
-};
-
+  };
 </script>
