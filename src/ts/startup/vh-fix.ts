@@ -1,4 +1,4 @@
-export default function vhFix() {
+export default function vhFix(): void {
   const documentEl = document.documentElement;
   const vh = window.innerHeight * 0.01;
   documentEl.style.setProperty('--vh', `${vh}px`);

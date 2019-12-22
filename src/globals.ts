@@ -12,7 +12,11 @@ Vue.use(Vuebar);
 Vue.prototype.$evBus = eventBus;
 Vue.prototype.$moment = moment;
 
-const packageComponents = { VRuntimeTemplate, Fragment };
+interface PackageComponents {
+  [propName: string]: object;
+}
+
+const packageComponents: PackageComponents = { VRuntimeTemplate, Fragment };
 
 Object.keys(packageComponents).forEach((compName) => {
   Vue.component(compName, packageComponents[compName]);
@@ -33,7 +37,7 @@ requireComponent.keys().forEach((fileName) => {
     camelCase(
       fileName
         .split('/')
-        .pop()
+        .pop()!
         .replace(/\.\w+$/, ''),
     ),
   );

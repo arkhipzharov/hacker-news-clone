@@ -17,11 +17,6 @@ module.exports = merge(baseConfig, {
   module: {
     rules: [
       {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: ['babel-loader'],
-      },
-      {
         test: /\.(scss|css)$/,
         use: [
           MiniCssExtractPlugin.loader,
@@ -95,7 +90,7 @@ module.exports = merge(baseConfig, {
           {
             loader: 'svgo-loader',
             options: {
-              externalConfig: 'svgo.config.yml',
+              externalConfig: '.svgo.yml',
             },
           },
         ],

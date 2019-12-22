@@ -8,15 +8,17 @@
   </div>
 </template>
 
-<script>
-  import setTimeoutProm from '@/js/helpers/promises';
+<script lang="ts">
+  import Vue from 'vue';
+  import delay from '@/ts/helpers/proms';
 
-  export default {
-    async mounted() {
-      await setTimeoutProm(0);
+  export default Vue.extend({
+    async mounted(): Promise<undefined> {
+      await delay(0);
       this.$vuebar.refreshScrollbar(this.$el);
+      return undefined;
     },
-  };
+  });
 </script>
 
 <style lang="scss">

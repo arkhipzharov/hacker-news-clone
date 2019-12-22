@@ -5,31 +5,49 @@ const SpriteLoaderPlugin = require('svg-sprite-loader/plugin');
 const DirectoryNamedWebpackPlugin = require('directory-named-webpack-plugin');
 
 module.exports = {
-  entry: './src/main.js',
+  entry: './src/main.ts',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'js/main.[hash].js',
   },
   resolve: {
-    extensions: ['.js', '.vue', '.scss'],
+    extensions: ['.vue', '.ts', '.js', '.scss'],
     plugins: [new DirectoryNamedWebpackPlugin(true)],
     alias: {
       vue$: 'vue/dist/vue.common',
-      '@': path.resolve(__dirname, 'src/'),
+      '@': path.resolve(__dirname, 'src'),
     },
   },
   module: {
     rules: [
       {
-        test: /\.vue$/,
-        use: {
-          loader: 'vue-loader',
-          options: {
-            compilerOptions: {
-              whitespace: 'condense',
+        test: /\.ts$/,
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: 'ts-loader',
+            options: {
+              appendTsSuffixTo: [/\.vue$/],
             },
           },
-        },
+        ],
+      },
+      {
+        test: /\.vue$/,
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: 'vue-loader',
+            options: {
+              compilerOptions: {
+                whitespace: 'condense',
+              },
+              loaders: {
+                ts: 'ts-loader',
+              },
+            },
+          },
+        ],
       },
     ],
   },
