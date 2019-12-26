@@ -22,22 +22,21 @@
   }
 
   body {
-    height: 100%;
     min-width: 320px;
+    height: 100%;
     color: $text-white;
     font-family: $font-roboto-slab;
     background-color: $block-black;
-
-    &.ios-safari-font-weight-fix {
-      text-rendering: optimizeLegibility, optimizeLegibility;
-      -webkit-text-stroke: 0.5px;
-    }
   }
 
   .app {
-    flex-direction: column;
     display: flex;
+    flex-direction: column;
+    // for browsers that doesn't support css variables
     height: 100vh;
+    // fix overflowing screen height on ios safari
+    //
+    // https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
     height: calc(var(--vh, 1vh) * 100);
   }
 </style>

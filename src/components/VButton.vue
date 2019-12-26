@@ -1,5 +1,5 @@
 <template>
-  <button class="v-button">
+  <button class="button">
     <slot></slot>
   </button>
 </template>
@@ -11,6 +11,6 @@
 </script>
 
 <style lang="scss">
-  .v-button {
+  .button {
   }
 </style>

@@ -1,7 +1,4 @@
-export default async function request(
-  url: string,
-  options = {},
-): Promise<object | undefined> {
+export default async function request(url: string, options: object = {}) {
   const response = await fetch(url, options);
   try {
     if (response.ok) {

@@ -1,3 +1,5 @@
+# config is found on internet, only some options was changed
+
 plugins:
   - cleanupAttrs: true
   - removeDoctype: true

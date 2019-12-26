@@ -1,4 +1,3 @@
 dist/**/*.css
-src/scss/helpers/mixins/*.scss
 src/scss/base/normalize*.scss
-src/components/V*.vue
+src/scss/helpers/mixins/*.scss

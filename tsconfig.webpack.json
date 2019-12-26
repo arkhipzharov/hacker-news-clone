@@ -1,0 +1,9 @@
+// need to specify separate config bcs otherwise webpack don't see custom
+// declaration files
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "esModuleInterop": true
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "compilerOptions": {
+    "target": "es2015",
+    "strict": true,
+    "noImplicitReturns": true,
+    // Module '...' can only be default-imported using the
+    // 'allowSyntheticDefaultImports' flag
+    "allowSyntheticDefaultImports": true,
+    // do not output unnecessary files into file system
+    "noEmit": true,
+    // errors in declaration files of packages in node_modules was shown
+    "skipLibCheck": true,
+    // more pretty output in terminal, this is not working for tsconfig.json
+    // because used by ts-loader
+    "pretty": true,
+    // Cannot find module '...'
+    "moduleResolution": "node",
+    "types": [
+      // Property 'context' does not exist on type 'Require'
+      "webpack-env",
+      /*
+        Cannot find name 'expect'.
+
+        expect(wrapper.isVueInstance()).toBeTruthy();
+      */
+      "jest",
+      /*
+        Cannot find name 'global'. Did you mean 'globals'?
+
+        global[name] = globals[name];
+      */
+      "node"
+    ],
+    // vscode path completion fix
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  },
+  // this is to not show errors about wrong imports bcs tsc can't process
+  // short paths and vue sfc filename without extension unlike webpack
+  "include": [
+    "src/test/**/*.ts",
+    "src/components/**/*.test.ts",
+    "src/ts/declarations/*.d.ts"
+  ],
+  "exclude": ["node_modules"]
+}

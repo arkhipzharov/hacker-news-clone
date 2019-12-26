@@ -1,31 +1,21 @@
 import Vue from 'vue';
 import upperFirst from 'lodash/upperFirst';
 import camelCase from 'lodash/camelCase';
-import VRuntimeTemplate from 'v-runtime-template';
-import { Fragment } from 'vue-fragment';
 import Vuebar from 'vuebar';
 import moment from 'moment';
 import eventBus from './event-bus';
 
 Vue.use(Vuebar);
 
+// to not import these every time
 Vue.prototype.$evBus = eventBus;
 Vue.prototype.$moment = moment;
 
-interface PackageComponents {
-  [propName: string]: object;
-}
-
-const packageComponents: PackageComponents = { VRuntimeTemplate, Fragment };
-
-Object.keys(packageComponents).forEach((compName) => {
-  Vue.component(compName, packageComponents[compName]);
-});
-
+// https://vuejs.org/v2/guide/components-registration.html#Automatic-Global-Registration-of-Base-Components
 const requireComponent = require.context(
-  // Import the components located in the components folder, as well as the
-  // name of which begins with the letter v, and then consider their removal,
-  // movement and change
+  // Import commonly used components located in the components folder, as well
+  // as the name of which begins with the letter v, and then consider their
+  // removal, movement and change
   './components',
   false,
   /V[A-Z]\w+\.vue$/,

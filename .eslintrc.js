@@ -1,65 +1,22 @@
-const typescriptEslintRecommended = require('@typescript-eslint/eslint-plugin/dist/configs/recommended.json');
-const typescriptEslintPrettier = require('eslint-config-prettier/@typescript-eslint');
-
 module.exports = {
-  root: true,
   env: {
-    'browser': true,
-    'es6': true,
+    browser: true,
+    es6: true,
+  },
+  // 'Use the latest vue-eslint-parser' fix
+  //
+  // https://github.com/vuejs/eslint-plugin-vue/issues/30#issuecomment-434855197
+  parser: 'vue-eslint-parser',
+  parserOptions: {
+    parser: '@typescript-eslint/parser',
   },
   extends: [
     'airbnb-base',
     'plugin:vue/recommended',
+    'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
   ],
   overrides: [
-    {
-      files: ['*.ts', '*.vue'],
-      plugins: ['@typescript-eslint', 'prettier'],
-      parser: 'vue-eslint-parser',
-      parserOptions: {
-        'parser': '@typescript-eslint/parser',
-        'ecmaVersion': 2018,
-        'sourceType': 'module',
-      },
-      rules: {
-        // fix overrides that don't support "extends" bcs need to ignore tests
-        // with js extension
-        ...typescriptEslintRecommended.rules,
-        ...typescriptEslintPrettier.rules,
-        /*
-          camelCase(
-            fileName
-              .split('/')
-              .pop()!
-              .replace(/\.\w+$/, ''),
-          ),
-
-          if (iOSSafari) {
-            document.querySelector('body')!.classList.add('...');
-          }
-
-          Said that we shouldn't use !, but we definetly know that all gonna be
-          ok in such situations
-        */
-        '@typescript-eslint/no-non-null-assertion': 'off',
-        /*
-          import Vue from 'vue';
-
-          declare module 'vue/types/vue' {
-            interface Vue {
-              $vuebar: {
-                [propName: string]: --> any;
-              };
-            }
-          }
-
-          There's no way to define vue prototype properties created by plugins
-          without it
-        */
-        '@typescript-eslint/no-explicit-any': 'off',
-      },
-    },
     {
       files: ['*.vue'],
       rules: {
@@ -71,7 +28,7 @@ module.exports = {
       },
     },
     {
-      files: ['*.test.js'],
+      files: ['*.test.ts'],
       /*
         --> describe('TheTasksCompleted', () => {
           --> test(() => {
@@ -250,5 +207,35 @@ module.exports = {
         svg: 'never',
       },
     ],
+    /*
+      camelCase(
+        fileName
+          .split('/')
+          .pop()!
+          .replace(/\.\w+$/, ''),
+      ),
+
+      if (iOSSafari) {
+        document.querySelector('body')!.classList.add('...');
+      }
+
+      Said that we shouldn't use !, but we definetly know that all gonna be
+      ok in such situations
+    */
+    '@typescript-eslint/no-non-null-assertion': 'off',
+    // typescript can figure the return type out by looking at the return
+    // statements, and it's feeling overhead to write them all
+    '@typescript-eslint/explicit-function-return-type': 'off',
+    /*
+      declare namespace NodeJS {
+        export interface Global {
+          [propName: string]: any;
+        }
+      }
+
+      for extending global object and don't import helper functions every time
+      in unit tests
+    */
+    '@typescript-eslint/no-explicit-any': 'off',
   },
 };

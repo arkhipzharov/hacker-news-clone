@@ -4,22 +4,31 @@
   "main": "src/main.ts",
   "private": true,
   "scripts": {
-    "dev": "webpack-dev-server --mode development --config webpack.dev.js",
-    "build": "webpack --mode production --config webpack.build.js",
-    "test": "jest"
+    "dev": "cross-env TS_NODE_PROJECT=\"tsconfig.webpack.json\" webpack-dev-server --mode development --devtool source-map --config webpack.dev.ts",
+    "build": "cross-env TS_NODE_PROJECT=\"tsconfig.webpack.json\" webpack --mode production --config webpack.build.ts",
+    "test": "jest --watch",
+    "types": "tsc --watch --project ./tsconfig.test.json"
   },
   "devDependencies": {
     "@babel/cli": "^7.7.7",
     "@babel/core": "^7.7.7",
-    "@babel/preset-env": "^7.7.7",
+    "@babel/preset-typescript": "^7.7.7",
+    "@types/html-webpack-plugin": "^3.2.1",
+    "@types/jest": "^24.0.24",
     "@types/lodash": "^4.14.149",
+    "@types/node": "^13.1.0",
+    "@types/svg-sprite-loader": "^3.9.1",
+    "@types/webpack": "^4.41.0",
+    "@types/webpack-dev-server": "^3.9.0",
     "@types/webpack-env": "^1.14.1",
-    "@typescript-eslint/eslint-plugin": "^2.12.0",
-    "@typescript-eslint/parser": "^2.12.0",
+    "@types/webpack-merge": "^4.1.5",
+    "@typescript-eslint/eslint-plugin": "^2.13.0",
+    "@typescript-eslint/parser": "^2.13.0",
     "@vue/test-utils": "^1.0.0-beta.30",
     "babel-jest": "^24.9.0",
     "babel-plugin-require-context-hook": "^1.0.0",
     "clean-webpack-plugin": "^2.0.2",
+    "cross-env": "^6.0.3",
     "css-loader": "^2.1.0",
     "cssnano": "^4.1.10",
     "directory-named-webpack-plugin": "^4.0.1",
@@ -45,6 +54,7 @@
     "style-loader": "^0.23.1",
     "stylelint": "^12.0.0",
     "stylelint-config-prettier": "^7.0.0",
+    "stylelint-config-rational-order": "^0.1.2",
     "stylelint-config-sass-guidelines": "^6.2.0",
     "stylelint-prettier": "^1.1.2",
     "stylelint-scss": "^3.13.0",
@@ -54,12 +64,15 @@
     "svgo-loader": "^2.2.1",
     "terser-webpack-plugin": "^1.4.1",
     "ts-loader": "^6.2.1",
-    "typescript": "^3.3.1",
+    "ts-node": "^8.5.4",
+    "tsconfig-paths": "^3.9.0",
+    "typescript": "^3.7.4",
     "url-loader": "^1.1.2",
     "vue-jest": "^3.0.5",
     "vue-loader": "^15.8.3",
     "vue-style-loader": "^4.1.2",
     "vue-template-compiler": "^2.6.11",
+    "vuex-smart-module": "^0.3.2",
     "webpack": "^4.41.4",
     "webpack-cli": "^3.3.10",
     "webpack-dev-server": "^3.10.1",
@@ -79,36 +92,8 @@
     "vuex": "^3.1.2",
     "vuex-persistedstate": "^2.7.0"
   },
-  "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "vue"
-    ],
-    "transform": {
-      "^.+\\.js$": "<rootDir>/node_modules/babel-jest",
-      ".*\\.(vue)$": "<rootDir>/node_modules/vue-jest"
-    },
-    "moduleNameMapper": {
-      "^@/(.*)$": "<rootDir>/src/$1"
-    },
-    "setupFiles": [
-      "<rootDir>/src/tests/require-context-fix.js",
-      "<rootDir>/src/tests/setup.js"
-    ]
-  },
   "engines": {
     "node": ">= 10.0.0",
     "npm": ">= 6.0.0"
-  },
-  "browserslist": {
-    "production": [
-      "> 0.2%",
-      "last 2 versions",
-      "not dead"
-    ],
-    "development": [
-      "last 1 chrome version"
-    ]
   }
 }

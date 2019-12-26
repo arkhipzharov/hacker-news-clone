@@ -9,6 +9,7 @@ const routes = [{ path: '/', component: Main, name: 'Main' }];
 const routerOptions: RouterOptions = {
   routes,
   scrollBehavior() {
+    // reset scroll when re-enter page
     return { x: 0, y: 0 };
   },
 };

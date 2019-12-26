@@ -1,14 +1,24 @@
-const CleanWebpackPlugin = require('clean-webpack-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const merge = require('webpack-merge');
-const baseConfig = require('./webpack.base.js');
+import path from 'path';
+import webpack from 'webpack';
+import CleanWebpackPlugin from 'clean-webpack-plugin';
+import TerserPlugin from 'terser-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import merge from 'webpack-merge';
+import baseConfig from './webpack.base';
 
-module.exports = merge(baseConfig, {
-  performance: { hints: false },
+const config: webpack.Configuration = {
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: './js/main.[hash].js',
+  },
+  performance: {
+    // to not show warnings about too big bundle size
+    hints: false,
+  },
   optimization: {
     minimizer: [
       new TerserPlugin({
+        // for webpack performance
         cache: true,
         parallel: true,
       }),
@@ -17,12 +27,13 @@ module.exports = merge(baseConfig, {
   module: {
     rules: [
       {
-        test: /\.(scss|css)$/,
+        test: /\.scss$/,
         use: [
           MiniCssExtractPlugin.loader,
           {
             loader: 'css-loader',
             options: {
+              // for scss
               importLoaders: 1,
             },
           },
@@ -32,6 +43,7 @@ module.exports = merge(baseConfig, {
             loader: 'sass-resources-loader',
             options: {
               resources: [
+                // import content from that files in all vue sfc
                 './src/scss/helpers/variables.scss',
                 './src/scss/helpers/mixins/*.scss',
               ],
@@ -40,39 +52,33 @@ module.exports = merge(baseConfig, {
         ],
       },
       {
-        test: /\.(woff|woff2|otf)$/,
+        test: /\.(woff|woff2)$/,
         use: [
           {
             loader: 'file-loader',
             options: {
+              // preserve folder structure in bundle
               useRelativePath: true,
-              outputPath: 'assets/fonts/',
-              publicPath: '../../assets/fonts/',
+              // webpack build script is not running if path is specified with
+              // path.resolve, so it's like this
+              outputPath: 'assets/fonts',
+              publicPath: '../../assets/fonts',
+              // preserve name in bundle
               name: '[name].[ext]',
             },
           },
         ],
       },
       {
-        test: /\.(jpg|webp)$/,
+        test: /\.(jpg|png)$/,
         use: [
           {
             loader: 'url-loader',
             options: {
+              // inline images if size under 10000 bytes
               limit: 10000,
-              context: 'src/',
-              name: '[path][name].[ext]',
-            },
-          },
-        ],
-      },
-      {
-        test: /\.(mp3|wav)$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              context: 'src/',
+              // preserve folder structure and name in bundle
+              context: path.resolve(__dirname, 'src'),
               name: '[path][name].[ext]',
             },
           },
@@ -84,12 +90,14 @@ module.exports = merge(baseConfig, {
           {
             loader: 'svg-sprite-loader',
             options: {
+              // put all svg icons in separate file sprite.svg
               extract: true,
             },
           },
           {
             loader: 'svgo-loader',
             options: {
+              // doesn't use external config by default
               externalConfig: '.svgo.yml',
             },
           },
@@ -99,8 +107,11 @@ module.exports = merge(baseConfig, {
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: 'styles/style.[hash].css',
+      // change bundled css filename
+      filename: './styles/style.[hash].css',
     }),
     new CleanWebpackPlugin(),
   ],
-});
+};
+
+export default merge(baseConfig, config);

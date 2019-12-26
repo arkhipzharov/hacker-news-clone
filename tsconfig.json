@@ -1,17 +1,32 @@
 {
   "compilerOptions": {
-    "target": "esnext",
+    "target": "es2015",
+    // for webpack config to be written with typescript
+    "module": "commonjs",
     "strict": true,
     "noImplicitReturns": true,
-    "moduleResolution": "node",
-    "baseUrl": "./",
+    // for webpack config to be written with typescript
+    "esModuleInterop": true,
+    // Module '...' can only be default-imported using the
+    // 'allowSyntheticDefaultImports' flag
     "allowSyntheticDefaultImports": true,
-    "noErrorTruncation": true,
-    "pretty": true,
+    // for debugging typescript vue sfc in chrome dev tools
+    "sourceMap": true,
+    // Cannot find module '...'
+    "moduleResolution": "node",
+    // Property 'context' does not exist on type 'Require'
+    "types": ["webpack-env"],
+    // vscode path completion fix
+    "baseUrl": "./",
     "paths": {
       "@/*": ["src/*"]
     }
   },
   "include": ["src/**/*"],
-  "files": ["src/ts/declarations/vue-shim.d.ts"]
+  "exclude": [
+    "node_modules",
+    "src/components/**/*.test.ts",
+    // do not process tests related files bcs typescript.test.json is for this
+    "src/test/**/*.ts"
+  ]
 }

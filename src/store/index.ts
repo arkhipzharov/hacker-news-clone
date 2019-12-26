@@ -1,11 +1,10 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import state from './state';
+import { createStore } from 'vuex-smart-module';
+import { root } from './root';
 
 Vue.use(Vuex);
 
-const store = new Vuex.Store({
-  state,
-});
+const store = createStore(root);
 
 export default store;
