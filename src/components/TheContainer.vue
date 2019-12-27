@@ -1,8 +1,12 @@
+<!-- eslint-disable prettier/prettier -->
 <template>
   <div class="container">
-    <slot></slot>
+    <div class="container__inner">
+      <slot></slot>
+    </div>
   </div>
 </template>
+<!-- eslint-enable -->
 
 <script lang="ts">
   import Vue from 'vue';
@@ -13,6 +17,10 @@
 <style lang="scss">
   .container {
     flex: 1 1 0;
-    width: 100%;
+
+    &__inner {
+      height: 100%;
+      padding: 0 15px;
+    }
   }
 </style>

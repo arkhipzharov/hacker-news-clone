@@ -1,8 +1,18 @@
 // Color pallette
 
-$white: #ffffff;
+$white: #f9efec;
 
 $black: #000000;
+
+$grey: #1b1d1e;
+$grey-dark: #181a1b;
+$grey-light: #aeaaaf;
+
+$orange: #ae3611;
+
+$orange-pink: #ef7a57;
+
+$blue: #4debff;
 
 /*
   End-use variables containing partially or fully colors taken from variables
@@ -10,17 +20,28 @@ $black: #000000;
   variable in the code itself if you need to change the color when choosing it
 */
 
+// Text
+
 $text-white: $white;
 
-$text-black: $black;
+$text-grey-light: $grey-light;
 
-$block-white: $white;
+$text-orange-pink: $orange-pink;
 
-$block-black: $black;
+// Blocks
+
+$block-grey: $grey;
+$block-grey-dark: $grey-dark;
+
+$block-orange: $orange;
 
 // Shadows
 
 $shadow: $black;
+
+// Icons
+
+$icon-blue: $blue;
 
 // Media queries
 

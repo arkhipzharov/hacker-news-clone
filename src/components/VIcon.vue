@@ -1,3 +1,4 @@
+<!-- eslint-disable prettier/prettier -->
 <template>
   <svg :viewBox="viewBox">
     <!--
@@ -6,6 +7,7 @@
     <use :href="'#' + href"></use>
   </svg>
 </template>
+<!-- eslint-enable -->
 
 <script lang="ts">
   import Vue from 'vue';

@@ -4,12 +4,19 @@
 }
 
 a {
+  display: inline-block;
   color: inherit;
   text-decoration: none;
+  cursor: pointer;
 }
 
 svg {
+  display: block;
   fill: currentColor;
+}
+
+img {
+  display: block;
 }
 
 button {
@@ -21,6 +28,7 @@ button {
   border: 0;
   outline: none;
   cursor: pointer;
+  display: block;
 }
 
 p {
@@ -35,6 +43,7 @@ input {
   background-color: inherit;
   border: 0;
   outline: none;
+  display: block;
 }
 
 // Убирает стрелки у input типа number
@@ -56,6 +65,7 @@ textarea {
   border: 0;
   outline: none;
   resize: none;
+  display: block;
 }
 
 ul,

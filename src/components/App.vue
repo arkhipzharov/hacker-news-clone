@@ -1,13 +1,15 @@
+<!-- eslint-disable prettier/prettier -->
 <template>
   <div class="app">
     <TheHeader />
     <router-view />
   </div>
 </template>
+<!-- eslint-enable -->
 
 <script lang="ts">
   import Vue from 'vue';
-  import TheHeader from './TheHeader.vue';
+  import TheHeader from './TheHeader';
 
   export default Vue.extend({
     components: {
@@ -24,9 +26,10 @@
   body {
     min-width: 320px;
     height: 100%;
-    color: $text-white;
+    color: $text-grey-light;
+    font-size: 16px;
     font-family: $font-roboto-slab;
-    background-color: $block-black;
+    background-color: $block-grey;
   }
 
   .app {
