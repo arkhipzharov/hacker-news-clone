@@ -3,7 +3,7 @@
   <div class="card">
     <a class="card__image">
       <img
-        src="~@/assets/img/cards/sky.jpg"
+        src="@/assets/img/decorations/cards/sky.jpg"
         alt="sky"
       >
     </a>
@@ -56,6 +56,7 @@
     padding: 20px 20px 35px;
     overflow: hidden;
     background-color: $block-grey-dark;
+    border-radius: 3px;
     box-shadow: rgba($shadow, 0.14) 0 2px 2px 0,
       rgba($shadow, 0.2) 0 3px 1px -2px, rgba($shadow, 0.12) 0 1px 5px 0;
 
@@ -147,6 +148,8 @@
     }
 
     &__button-content {
+      position: relative;
+
       > span {
         color: $text-white;
         font-size: 14px;
@@ -155,9 +158,9 @@
       > svg {
         position: absolute;
         top: 50%;
-        left: calc(100% + 10px);
-        width: 10.64px;
-        height: 10.64px;
+        left: calc(100% + 12px);
+        width: 13px;
+        height: 13px;
         transform: translateY(-50%);
         fill: $text-white;
       }
@@ -170,7 +173,6 @@
       width: 100%;
       height: 3px;
       background-color: $block-orange;
-      border-radius: 0 0 999px 999px;
     }
   }
 </style>

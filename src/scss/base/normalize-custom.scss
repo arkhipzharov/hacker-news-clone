@@ -24,7 +24,7 @@ button {
   color: inherit;
   font-weight: inherit;
   line-height: inherit;
-  background-color: inherit;
+  background-color: transparent;
   border: 0;
   outline: none;
   cursor: pointer;
@@ -40,7 +40,7 @@ input {
   padding: 0;
   color: inherit;
   font-weight: inherit;
-  background-color: inherit;
+  background-color: transparent;
   border: 0;
   outline: none;
   display: block;
@@ -61,7 +61,7 @@ input[type='number'] {
 textarea {
   padding: 0;
   color: inherit;
-  background-color: inherit;
+  background-color: transparent;
   border: 0;
   outline: none;
   resize: none;

@@ -1,3 +1,15 @@
+<!--
+  prettier is conflicting with vue/max-attributes-per-line, and there's only 2
+  ways to fix this, either configure prettier to wrap all atributes in one line
+  up to 80 characters ruler
+
+  https://github.com/prettier/eslint-plugin-prettier/issues/94#issuecomment-438781791
+
+  or write these 2 special comments to disable prettier eslint integration for
+  <template> tag
+
+  https://github.com/vuejs/eslint-plugin-vue/issues/260#issuecomment-445791801
+-->
 <!-- eslint-disable prettier/prettier -->
 <template>
   <div class="app">

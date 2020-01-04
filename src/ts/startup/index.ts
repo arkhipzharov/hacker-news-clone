@@ -12,7 +12,7 @@ icons.keys().forEach(icons);
 // https://osvaldas.info/caching-svg-sprite-in-localstorage
 svgSpriteInjector('sprite.svg', {
   // for refreshing svg sprite cache
-  revision: 1.61,
+  revision: 1.62,
 });
 
 // to make styles consistent before external styles loaded, which anyway takes

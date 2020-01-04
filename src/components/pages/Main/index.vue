@@ -2,7 +2,7 @@
 <template>
   <TheContainer>
     <RptCard
-      v-for="num in 10"
+      v-for="num in 2"
       :key="num"
     />
   </TheContainer>

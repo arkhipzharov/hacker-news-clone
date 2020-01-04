@@ -1,6 +1,6 @@
 # Hacker news clone
 
-This is a pet project trying to be like [hacker-news.news](hacker-news.news) for better learning different types of testing,
+This is a [pet project](https://github.com/shiftenko/hacker-news-clone) trying to be like [hacker-news.news](https://www.hacker-news.news) for better learning different types of testing,
 typescript, how to work with api, and so on
 
 ## 📥 Setup
