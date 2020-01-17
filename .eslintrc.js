@@ -164,6 +164,10 @@ module.exports = {
       through a dash
     */
     'vue/attribute-hyphenation': 'off',
+    /*
+      <div class="header__logo-icon">HN</div>
+    */
+    'vue/singleline-html-element-content-newline': 'off',
     'vue/script-indent': [
       'error',
       2,
@@ -180,6 +184,7 @@ module.exports = {
           </script>
         */
         baseIndent: 1,
+        ignores: ["IfStatement"],
       },
     ],
     'vue/html-self-closing': [

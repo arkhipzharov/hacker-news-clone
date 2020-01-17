@@ -7,13 +7,16 @@
   -->
   <Fragment>
     <header class="header">
-      <a class="header__logo">
-        <div class="header__logo-icon">HN</div>
+      <router-link
+        to="/"
+        class="header__logo"
+      >
+        <span class="header__logo-icon">HN</span>
         <div class="header__logo-text">
           <span>Hacker</span>
           <span>News</span>
         </div>
-      </a>
+      </router-link>
       <button
         class="header__toggle-menu-btn"
         @click="toggleMenu(false)"

@@ -1,5 +1,6 @@
-export default async function request(url: string, options: object = {}) {
-  const response = await fetch(url, options);
+export default async function request(remainingUrl: string) {
+  const baseUrl = 'http://hacker-news.firebaseio.com/v0/';
+  const response = await fetch(`${baseUrl}${remainingUrl}`);
   try {
     if (response.ok) {
       const parsedData = await response.json();

@@ -17,14 +17,31 @@
         </button>
       </div>
     </div>
-    <button
-      v-for="(name, index) in menuItemNames"
+    <div
+      v-for="(name, index) in menuItemAndPageNames"
       :key="index"
-      class="menu__item"
+      class="menu__item-wrapper"
     >
-      <span>{{ name }}</span>
-      <VIcon :href="'chevron-right'" />
-    </button>
+      <router-link
+        class="menu__item"
+        :to="name.toLowerCase()"
+      >
+        <span>{{ name }}</span>
+        <VIcon :href="'chevron-right'" />
+      </router-link>
+    </div>
+    <div class="menu__item-wrapper">
+      <button class="menu__item">
+        <span>Login</span>
+        <VIcon :href="'chevron-right'" />
+      </button>
+    </div>
+    <div class="menu__item-wrapper">
+      <button class="menu__item">
+        <span>About</span>
+        <VIcon :href="'chevron-right'" />
+      </button>
+    </div>
   </div>
 </template>
 <!-- eslint-enable -->
@@ -35,17 +52,7 @@
   export default Vue.extend({
     data() {
       return {
-        menuItemNames: [
-          'TopStory',
-          'NewStory',
-          'BestStory',
-          'Show',
-          'Ask',
-          'Job',
-          'Launch',
-          'Login',
-          'About',
-        ],
+        menuItemAndPageNames: ['Top', 'New', 'Best', 'Show', 'Ask', 'Job'],
       };
     },
   });
@@ -118,12 +125,18 @@
       }
     }
 
-    &__item {
+    &__item-wrapper {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
       width: 100%;
       height: 50px;
+    }
+
+    &__item {
+      display: flex;
+      flex: 1 1 0;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
       padding: 0 20px;
 
       > svg {

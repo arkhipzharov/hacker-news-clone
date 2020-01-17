@@ -7,29 +7,29 @@
         alt="sky"
       >
     </a>
-    <a class="card__title">
-      WiFi deauthentication attacks and home security
-    </a>
+    <a class="card__title">{{ data.title }}</a>
     <div class="card__actions">
       <a class="card__actions-item">
         <VIcon :href="'heart'" />
-        <span>183 points</span>
+        <span>{{ data.score }} points</span>
       </a>
       <a class="card__actions-item">
         <VIcon :href="'comment'" />
-        <span>85 comments</span>
+        <span>{{ data.descendants }} comments</span>
       </a>
     </div>
-    <p class="card__description">
-      I live in a large apartment complex (it's literally a city block big), so
-      I spend a disproportionate amount of time walking down corridors. Recently
-      one of my neighbours installed a Ring wireless…
+    <p class="card__text">
+      {{ data.text }}
     </p>
     <div class="card__by-and-date">
-      <span class="card__by">By <a>edward</a></span>
+      <span class="card__by">By <a>{{ data.by }}</a></span>
       <div class="card__date">
         <VIcon :href="'calendar'" />
-        <span>2019-12-27</span>
+        <span>
+          {{
+            $moment(convertUnixTimestampToDate(data.time)).format('YYYY-MM-DD')
+          }}
+        </span>
       </div>
     </div>
     <button class="card__button">
@@ -46,7 +46,19 @@
 <script lang="ts">
   import Vue from 'vue';
 
-  export default Vue.extend({});
+  export default Vue.extend({
+    props: {
+      data: {
+        type: Object,
+        required: true,
+      },
+    },
+    methods: {
+      convertUnixTimestampToDate(unixTimestamp: number) {
+        return new Date(unixTimestamp * 1000);
+      },
+    },
+  });
 </script>
 
 <style lang="scss">
@@ -59,6 +71,10 @@
     border-radius: 3px;
     box-shadow: rgba($shadow, 0.14) 0 2px 2px 0,
       rgba($shadow, 0.2) 0 3px 1px -2px, rgba($shadow, 0.12) 0 1px 5px 0;
+
+    &:nth-last-child(2) {
+      margin-bottom: 0;
+    }
 
     &__image {
       height: 170px;
@@ -103,7 +119,7 @@
       }
     }
 
-    &__description {
+    &__text {
       margin-bottom: 50px;
       line-height: 26px;
     }
