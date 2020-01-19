@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VueRouter, { RouterOptions } from 'vue-router';
 import Main from './components/pages/Main';
+import User from './components/pages/User';
 
 Vue.use(VueRouter);
 
@@ -12,7 +13,7 @@ const routes = [
   { path: '/show', component: Main, name: 'Show' },
   { path: '/ask', component: Main, name: 'Ask' },
   { path: '/job', component: Main, name: 'Job' },
-  { path: '/launch', component: Main, name: 'Launch' },
+  { path: '/user', component: User, name: 'User' },
 ];
 
 const routerOptions: RouterOptions = {

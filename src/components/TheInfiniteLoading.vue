@@ -2,7 +2,8 @@
 <template>
   <InfiniteLoading
     spinner="waveDots"
-    @infinite="infiniteHandler"
+    :distance="700"
+    @infinite="handler"
   >
     <div slot="no-more">
       No more data
@@ -23,7 +24,7 @@
       InfiniteLoading,
     },
     props: {
-      infiniteHandler: {
+      handler: {
         type: Function,
         required: true,
       },

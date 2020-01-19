@@ -6,9 +6,11 @@ $black: #000000;
 
 $grey: #1b1d1e;
 $grey-dark: #181a1b;
-$grey-light: #aeaaaf;
+$grey-light: #333333;
+$grey-x-light: #aeaaaf;
 
 $orange: #ae3611;
+$orange-dark: #591e0d;
 
 $orange-pink: #ef7a57;
 
@@ -24,7 +26,7 @@ $blue: #4debff;
 
 $text-white: $white;
 
-$text-grey-light: $grey-light;
+$text-grey-light: $grey-x-light;
 
 $text-orange-pink: $orange-pink;
 
@@ -36,6 +38,11 @@ $block-grey: $grey;
 $block-grey-dark: $grey-dark;
 
 $block-orange: $orange;
+$block-orange-dark: $orange-dark;
+
+// Borders
+
+$border-grey: $grey-light;
 
 // Shadows
 

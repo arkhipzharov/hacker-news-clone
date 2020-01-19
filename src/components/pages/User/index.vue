@@ -1,7 +1,7 @@
 <!-- eslint-disable prettier/prettier -->
 <template>
   <TheContainer>
-    <TheCards />
+    <TheUser />
   </TheContainer>
 </template>
 <!-- eslint-enable -->
@@ -9,12 +9,12 @@
 <script lang="ts">
   import Vue from 'vue';
   import TheContainer from '@/components/TheContainer';
-  import TheCards from '@/components/TheCards';
+  import TheUser from './TheUser';
 
   export default Vue.extend({
     components: {
       TheContainer,
-      TheCards,
+      TheUser,
     },
   });
 </script>

@@ -4,7 +4,7 @@
     <a class="card__image">
       <img
         src="@/assets/img/decorations/cards/sky.jpg"
-        alt="sky"
+        alt="card image"
       >
     </a>
     <a class="card__title">{{ data.title }}</a>
@@ -18,9 +18,7 @@
         <span>{{ data.descendants }} comments</span>
       </a>
     </div>
-    <p class="card__text">
-      {{ data.text }}
-    </p>
+    <p class="card__text">{{ $stripHtml(data.text || '') | truncate(180) }}</p>
     <div class="card__by-and-date">
       <span class="card__by">By <a>{{ data.by }}</a></span>
       <div class="card__date">
@@ -32,30 +30,30 @@
         </span>
       </div>
     </div>
-    <button class="card__button">
+    <a
+      :href="data.url"
+      target="_blank"
+      class="card__button"
+    >
       <div class="card__button-content">
         <span>READ MORE</span>
         <VIcon :href="'arrow-right-long'" />
       </div>
-    </button>
+    </a>
     <span class="card__underline-decorator"></span>
   </div>
 </template>
 <!-- eslint-enable -->
 
 <script lang="ts">
-  import Vue from 'vue';
+  import mixins from 'vue-typed-mixins';
+  import convertUnixTimestampToDate from '@/mixins/convert-unix-timestamp-to-date';
 
-  export default Vue.extend({
+  export default mixins(convertUnixTimestampToDate).extend({
     props: {
       data: {
         type: Object,
         required: true,
-      },
-    },
-    methods: {
-      convertUnixTimestampToDate(unixTimestamp: number) {
-        return new Date(unixTimestamp * 1000);
       },
     },
   });

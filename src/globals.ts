@@ -2,14 +2,18 @@ import Vue from 'vue';
 import upperFirst from 'lodash/upperFirst';
 import camelCase from 'lodash/camelCase';
 import Vuebar from 'vuebar';
+import VueTruncate from 'vue-truncate-filter';
 import moment from 'moment';
+import stripHtml from 'string-strip-html';
 import eventBus from './event-bus';
 
 Vue.use(Vuebar);
+Vue.use(VueTruncate);
 
 // to not import these every time
 Vue.prototype.$evBus = eventBus;
 Vue.prototype.$moment = moment;
+Vue.prototype.$stripHtml = stripHtml;
 
 // https://vuejs.org/v2/guide/components-registration.html#Automatic-Global-Registration-of-Base-Components
 const requireComponent = require.context(
