@@ -49,6 +49,16 @@
         isMenuOpened: false,
       };
     },
+    watch: {
+      $route: {
+        immediate: true,
+        async handler() {
+          if (this.isMenuOpened) {
+            this.isMenuOpened = false;
+          }
+        },
+      },
+    },
     methods: {
       toggleMenu(isClickaway: boolean) {
         if (isClickaway) {

@@ -24,7 +24,7 @@
     >
       <router-link
         class="menu__item"
-        :to="name.toLowerCase()"
+        :to="`/${name.toLowerCase()}`"
       >
         <span>{{ name }}</span>
         <VIcon :href="'chevron-right'" />
