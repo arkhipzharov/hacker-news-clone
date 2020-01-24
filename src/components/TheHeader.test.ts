@@ -78,13 +78,12 @@ describe('TheHeader', () => {
   test('removes class from menu when click toggle button', async () => {
     wrapper = factory({
       stubs: ['router-link'],
-      data() {
-        return {
-          isMenuOpened: true,
-        };
-      },
     });
 
+    // added this here because immediate watch changes isMenuOpened to false on
+    // startup and test breaks
+    await Vue.nextTick();
+    wrapper.setData({ isMenuOpened: true });
     wrapper.find('.header__toggle-menu-btn').trigger('click');
     await Vue.nextTick();
 
