@@ -44,8 +44,7 @@ const config: webpack.Configuration = {
             options: {
               resources: [
                 // import content from that files in all vue sfc
-                './src/scss/helpers/variables.scss',
-                './src/scss/helpers/mixins/*.scss',
+                './src/scss/helpers/**/*.scss',
               ],
             },
           },

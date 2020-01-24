@@ -3,6 +3,8 @@
     "target": "es2015",
     "strict": true,
     "noImplicitReturns": true,
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
     // Module '...' can only be default-imported using the
     // 'allowSyntheticDefaultImports' flag
     "allowSyntheticDefaultImports": true,

@@ -24,5 +24,20 @@ module.exports = {
     'max-nesting-depth': null,
     // it was showing error even with specified properties order
     'order/properties-alphabetical-order': null,
+    /*
+      .user {
+        ...
+
+        .user__action { <-- reusable component
+          ...
+        }
+      }
+
+      'Selector should be written in lowercase with hyphens'
+      But it is pattern to avoid problems with styles
+
+      http://simurai.com/blog/2015/05/11/nesting-components#option-3---adopted-child
+    */
+    'selector-class-pattern': null,
   },
 };

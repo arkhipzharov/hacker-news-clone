@@ -15,6 +15,7 @@ module.exports = {
   },
   setupFiles: [
     '<rootDir>/src/test/require-context-fix.ts',
+    '<rootDir>/src/reusable-global-components.ts',
     '<rootDir>/src/test/helpers/index.ts',
   ],
 };

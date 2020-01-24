@@ -1,5 +1,4 @@
 import wrapperFactory from './wrapper-factory';
-import bindEventBusEmits from './bind-event-bus-emits';
 
 interface Globals {
   [propName: string]: Function;
@@ -7,7 +6,6 @@ interface Globals {
 
 const globals: Globals = {
   wrapperFactory,
-  bindEventBusEmits,
 };
 
 /*

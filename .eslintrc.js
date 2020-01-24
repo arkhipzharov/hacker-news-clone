@@ -114,6 +114,19 @@ module.exports = {
       Said that expect to return a value at the end of function
     */
     'consistent-return': 'off',
+    /*
+      const data: Data = {
+        actionDataIdsChunkSize: 3,
+        user: {} as UserData,
+      };
+
+      let actionsDataChunkWithoutErrors = actionsDataChunk.filter(
+        (data) => data !== null && !data.deleted && !data.dead,
+      );
+
+      "'data' is already declared in the upper scope"
+    */
+    'no-shadow': 'off',
     'no-console': [
       'error',
       {

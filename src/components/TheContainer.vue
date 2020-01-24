@@ -15,5 +15,6 @@
 <style lang="scss">
   .container {
     flex: 1 1 0;
+    margin-top: 50px;
   }
 </style>

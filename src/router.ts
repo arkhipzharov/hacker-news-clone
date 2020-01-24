@@ -13,7 +13,7 @@ const routes = [
   { path: '/show', component: Main, name: 'Show' },
   { path: '/ask', component: Main, name: 'Ask' },
   { path: '/job', component: Main, name: 'Job' },
-  { path: '/user', component: User, name: 'User' },
+  { path: '/user/:username', component: User, name: 'User' },
 ];
 
 const routerOptions: RouterOptions = {

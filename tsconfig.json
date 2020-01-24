@@ -5,6 +5,8 @@
     "module": "commonjs",
     "strict": true,
     "noImplicitReturns": true,
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
     // for webpack config to be written with typescript
     "esModuleInterop": true,
     // Module '...' can only be default-imported using the

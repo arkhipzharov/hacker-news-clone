@@ -4,6 +4,12 @@
   "compilerOptions": {
     "target": "es5",
     "module": "commonjs",
+    "strict": true,
+    // Could not find a declaration file for module '...'
+    "noImplicitAny": false,
+    "noImplicitReturns": true,
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
     "esModuleInterop": true
   }
 }

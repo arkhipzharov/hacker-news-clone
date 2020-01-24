@@ -1,16 +1,13 @@
 <!-- eslint-disable prettier/prettier -->
 <template>
   <InfiniteLoading
+    :key="itemsData.length > 0"
     spinner="waveDots"
-    :distance="700"
+    :distance="300"
     @infinite="handler"
   >
-    <div slot="no-more">
-      No more data
-    </div>
-    <div slot="no-results">
-      No results
-    </div>
+    <div slot="no-more">No more data</div>
+    <div slot="no-results">No results</div>
   </InfiniteLoading>
 </template>
 <!-- eslint-enable -->
@@ -26,6 +23,10 @@
     props: {
       handler: {
         type: Function,
+        required: true,
+      },
+      itemsData: {
+        type: Array,
         required: true,
       },
     },

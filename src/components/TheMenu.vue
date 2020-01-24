@@ -104,7 +104,7 @@
       flex: 1 1 0;
       height: 100%;
       color: $text-white;
-      font-size: 14px;
+      font-size: 15px;
 
       &::placeholder {
         opacity: 0.42;

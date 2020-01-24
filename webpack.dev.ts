@@ -1,6 +1,7 @@
 import webpack from 'webpack';
 import merge from 'webpack-merge';
 import baseConfig from './webpack.base';
+import 'webpack-dev-server';
 
 const config: webpack.Configuration = {
   output: {
@@ -42,8 +43,7 @@ const config: webpack.Configuration = {
             options: {
               resources: [
                 // import content from that files in all vue sfc
-                'src/scss/helpers/variables.scss',
-                'src/scss/helpers/mixins/*.scss',
+                'src/scss/helpers/**/*.scss',
               ],
             },
           },

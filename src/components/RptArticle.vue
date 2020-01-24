@@ -1,46 +1,62 @@
 <!-- eslint-disable prettier/prettier -->
 <template>
-  <div class="card">
-    <a class="card__image">
-      <img
-        src="@/assets/img/decorations/cards/sky.jpg"
-        alt="card image"
+  <div class="article">
+    <VCard>
+      <a
+        class="article__image"
+        :href="data.url"
+        target="_blank"
       >
-    </a>
-    <a class="card__title">{{ data.title }}</a>
-    <div class="card__actions">
-      <a class="card__actions-item">
-        <VIcon :href="'heart'" />
-        <span>{{ data.score }} points</span>
+        <img
+          src="@/assets/img/decorations/articles/sky.jpg"
+          alt="card image"
+        >
       </a>
-      <a class="card__actions-item">
-        <VIcon :href="'comment'" />
-        <span>{{ data.descendants }} comments</span>
+      <a
+        class="article__title"
+        :href="data.url"
+        target="_blank"
+      >{{ data.title }}</a>
+      <div class="article__actions">
+        <a class="article__actions-item">
+          <VIcon :href="'heart'" />
+          <span>{{ data.score }} points</span>
+        </a>
+        <a class="article__actions-item">
+          <VIcon :href="'comment'" />
+          <span>{{ data.descendants }} comments</span>
+        </a>
+      </div>
+      <p class="article__text">
+        {{ $stripHtml(data.text || '') | truncate(180) }}
+      </p>
+      <div class="article__by-and-date">
+        <router-link
+          class="article__by"
+          :to="`/user/${data.by}`"
+        >
+          By <a>{{ data.by }}</a>
+        </router-link>
+        <div class="article__date">
+          <VIcon :href="'calendar'" />
+          <span>
+            {{
+              $moment(convertUnixTimestampToDate(data.time)).format('YYYY-MM-DD')
+            }}
+          </span>
+        </div>
+      </div>
+      <a
+        :href="data.url"
+        target="_blank"
+        class="article__button"
+      >
+        <div class="article__button-content">
+          <span>READ MORE</span>
+          <VIcon :href="'arrow-right-long'" />
+        </div>
       </a>
-    </div>
-    <p class="card__text">{{ $stripHtml(data.text || '') | truncate(180) }}</p>
-    <div class="card__by-and-date">
-      <span class="card__by">By <a>{{ data.by }}</a></span>
-      <div class="card__date">
-        <VIcon :href="'calendar'" />
-        <span>
-          {{
-            $moment(convertUnixTimestampToDate(data.time)).format('YYYY-MM-DD')
-          }}
-        </span>
-      </div>
-    </div>
-    <a
-      :href="data.url"
-      target="_blank"
-      class="card__button"
-    >
-      <div class="card__button-content">
-        <span>READ MORE</span>
-        <VIcon :href="'arrow-right-long'" />
-      </div>
-    </a>
-    <span class="card__underline-decorator"></span>
+    </VCard>
   </div>
 </template>
 <!-- eslint-enable -->
@@ -60,20 +76,7 @@
 </script>
 
 <style lang="scss">
-  .card {
-    position: relative;
-    margin-bottom: 40px;
-    padding: 20px 20px 35px;
-    overflow: hidden;
-    background-color: $block-grey-dark;
-    border-radius: 3px;
-    box-shadow: rgba($shadow, 0.14) 0 2px 2px 0,
-      rgba($shadow, 0.2) 0 3px 1px -2px, rgba($shadow, 0.12) 0 1px 5px 0;
-
-    &:nth-last-child(2) {
-      margin-bottom: 0;
-    }
-
+  .article {
     &__image {
       height: 170px;
       margin-bottom: 40px;
@@ -155,6 +158,7 @@
       justify-content: center;
       width: 100%;
       height: 40px;
+      margin-bottom: 10px;
       background-color: $block-orange;
       border-radius: 2px;
       box-shadow: rgba($shadow, 0.14) 0 2px 2px 0,

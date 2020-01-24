@@ -39,7 +39,6 @@
     min-width: 320px;
     height: 100%;
     color: $text-grey-light;
-    font-size: 16px;
     font-family: $font-roboto-slab;
     background-color: $block-grey;
   }
