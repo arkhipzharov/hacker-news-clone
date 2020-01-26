@@ -1,7 +1,7 @@
 <!-- eslint-disable prettier/prettier -->
 <template>
   <InfiniteLoading
-    :key="itemsData.length > 0"
+    :key="$route.fullPath"
     spinner="waveDots"
     :distance="300"
     @infinite="handler"
@@ -23,10 +23,6 @@
     props: {
       handler: {
         type: Function,
-        required: true,
-      },
-      itemsData: {
-        type: Array,
         required: true,
       },
     },

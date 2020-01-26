@@ -1,19 +1,21 @@
 import Vue from 'vue';
 import VueRouter, { RouterOptions } from 'vue-router';
-import Main from './components/pages/Main';
+import Rest from './components/pages/Rest';
 import User from './components/pages/User';
+import Post from './components/pages/Post';
 
 Vue.use(VueRouter);
 
 const routes = [
-  { path: '/', redirect: '/top', component: Main, name: 'Main' },
-  { path: '/top', component: Main, name: 'Top' },
-  { path: '/new', component: Main, name: 'New' },
-  { path: '/best', component: Main, name: 'Best' },
-  { path: '/show', component: Main, name: 'Show' },
-  { path: '/ask', component: Main, name: 'Ask' },
-  { path: '/job', component: Main, name: 'Job' },
+  { path: '/', redirect: '/top', component: Rest, name: 'Rest' },
+  { path: '/top', component: Rest, name: 'Top' },
+  { path: '/new', component: Rest, name: 'New' },
+  { path: '/best', component: Rest, name: 'Best' },
+  { path: '/show', component: Rest, name: 'Show' },
+  { path: '/ask', component: Rest, name: 'Ask' },
+  { path: '/job', component: Rest, name: 'Job' },
   { path: '/user/:username', component: User, name: 'User' },
+  { path: '/post/:id', component: Post, name: 'Post' },
 ];
 
 const routerOptions: RouterOptions = {

@@ -49,11 +49,17 @@
 <script lang="ts">
   import Vue from 'vue';
 
+  interface Data {
+    menuItemAndPageNames: string[];
+  }
+
+  const data: Data = {
+    menuItemAndPageNames: ['Top', 'New', 'Best', 'Show', 'Ask', 'Job'],
+  };
+
   export default Vue.extend({
     data() {
-      return {
-        menuItemAndPageNames: ['Top', 'New', 'Best', 'Show', 'Ask', 'Job'],
-      };
+      return data;
     },
   });
 </script>

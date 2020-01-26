@@ -38,6 +38,14 @@
   import { Fragment } from 'vue-fragment';
   import TheMenu from '@/components/TheMenu';
 
+  interface Data {
+    isMenuOpened: boolean;
+  }
+
+  const data: Data = {
+    isMenuOpened: false,
+  };
+
   export default Vue.extend({
     components: {
       Fragment,
@@ -45,16 +53,14 @@
     },
     mixins: [clickaway],
     data() {
-      return {
-        isMenuOpened: false,
-      };
+      return data;
     },
     watch: {
       $route: {
         immediate: true,
-        async handler() {
+        handler() {
           if (this.isMenuOpened) {
-            this.isMenuOpened = false;
+            this.toggleMenu(false);
           }
         },
       },
@@ -101,7 +107,6 @@
       height: 35px;
       margin-right: 10px;
       color: $text-orange-pink;
-      font-size: 17px;
       background-color: $block-grey-dark;
       border-radius: 50%;
     }

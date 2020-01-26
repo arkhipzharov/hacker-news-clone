@@ -2,47 +2,63 @@
 <template>
   <div class="user">
     <div class="user__account-info">
-      <div class="user__avatar">
-        <img
-          src="~@/assets/img/decorations/avatars/working-table.png"
-          alt="user avatar"
-        >
-      </div>
-      <span class="user__username">{{ user.id }}</span>
+      <VAvatar class="user__avatar" />
+      <span class="user__username">{{ user.id || '...' }}</span>
       <div class="user__karma-and-created-timestamp">
         <div class="user__karma-and-created-timestamp-item">
-          <span>{{ user.karma }}</span>
+          <span>{{ user.karma || '...' }}</span>
           <span>Karma</span>
         </div>
         <div class="user__karma-and-created-timestamp-item">
           <span>
             {{
-              $moment(convertUnixTimestampToDate(user.created)).format(
-                'YYYY-MM-DD',
-              )
+              user.created
+                ? $moment(unixToDate(user.created)).format(
+                  'YYYY-MM-DD',
+                )
+                : '...'
             }}
           </span>
           <span>Created</span>
         </div>
       </div>
     </div>
-    <span class="user__actions-title">Recent Activity</span>
-    <div class="user__actions">
+    <div class="user__inner">
+      <VCard class="user__about">
+        <template v-if="user.about || (isRouteChanged && false)">
+          <span class="user__about-title">About me</span>
+          <p class="user__about-text">{{ $stripHtml(user.about || '...') }}</p>
+        </template>
+      </VCard>
+      <span class="user__actions-title">Recent Activity</span>
       <VCard
         v-for="(data, index) in actionsData"
         :key="index"
-        :class="['user__action', { 'card--purple': data.type !== 'comment' }]"
-        :headerText="`
-          ${data.type === 'comment' ? 'Commented: ' : 'Submitted: '}
-          \'\'${data.type === 'comment' ? data.parentArticleTitle : data.title}\'\'
-        `"
+        :class="['user__action', { 'card--submitted': data.type !== 'comment' }]"
       >
-        {{ $stripHtml(data.text || '') | truncate(180) }}
+        <template v-slot:header>
+          <router-link
+            class="user__action-header"
+            :to="
+              `/post/${
+                (data.type !== 'comment' && data.id) || data.parentPostId
+              }`
+            "
+            @click.prevent
+          >
+            {{
+              `
+                ${data.type === 'comment' ? 'Commented: ' : 'Submitted: '}
+                "${data.type === 'comment' ? data.parentPostTitle : data.title}"
+              `
+            }}
+          </router-link>
+        </template>
+        <template v-slot:default>
+          {{ $stripHtml(data.text || '') | truncate(180) }}
+        </template>
       </VCard>
-      <TheInfiniteLoading
-        :itemsData="actionsData"
-        :handler="loadActionsDataChunk"
-      />
+      <TheInfiniteLoading :handler="loadActionsDataChunk" />
     </div>
   </div>
 </template>
@@ -53,11 +69,13 @@
   import request from '@/ts/helpers/request';
   import TheInfiniteLoading from '@/components/TheInfiniteLoading';
   import resetFactory from '@/mixins/reset-factory';
-  import convertUnixTimestampToDate from '@/mixins/convert-unix-timestamp-to-date';
+  import unixToDate from '@/mixins/unix-to-date';
   import ItemData, { UserData } from '@/ts/interfaces/api-data';
+  import isItemDataInvalid from '@/ts/helpers/is-item-data-invalid';
 
   interface ActionData extends ItemData {
-    parentArticleTitle: string;
+    parentPostTitle: string;
+    parentPostId: number;
   }
 
   interface Data {
@@ -88,10 +106,7 @@
     isActionsDataLoaded: false,
   };
 
-  export default mixins(
-    convertUnixTimestampToDate,
-    resetFactory(dataToReset),
-  ).extend({
+  export default mixins(unixToDate, resetFactory(dataToReset)).extend({
     components: {
       TheInfiniteLoading,
     },
@@ -101,11 +116,14 @@
     watch: {
       $route: {
         immediate: true,
-        async handler() {
-          if (this.actionsData.length > 0) {
-            this.reset();
-          }
+        handler() {
+          this.reset();
         },
+      },
+    },
+    computed: {
+      isRouteChanged() {
+        return this.actionsData.length > 0;
       },
     },
     methods: {
@@ -164,13 +182,9 @@
           if (actionsDataChunkErrorsNum > 0) {
             this.actionsDataChunkErrorsNum = 0;
           }
-          if (
-            actionsDataChunk.some(
-              (data) => data === null || data.deleted || data.dead,
-            )
-          ) {
+          if (actionsDataChunk.some(isItemDataInvalid())) {
             const actionsDataChunkWithoutErrors = actionsDataChunk.filter(
-              (data) => data !== null && !data.deleted && !data.dead,
+              isItemDataInvalid(true),
             );
             this.actionsDataChunkErrorsNum =
               actionDataIdsChunkSize - actionsDataChunkWithoutErrors.length;
@@ -180,10 +194,12 @@
           }
           const actionsDataChunkWithoutErrors = this
             .actionsDataChunkWithoutErrors;
-          this.actionsData.push(
+          const actionsData = this.actionsData;
+          actionsData.push(
             ...actionsDataChunkWithoutErrors,
             ...actionsDataChunk,
           );
+          this.actionsData = actionsData;
           if (actionsDataChunkWithoutErrors.length > 0) {
             this.actionsDataChunkWithoutErrors = [];
           }
@@ -192,7 +208,9 @@
             $state.loaded();
           } else {
             this.isActionsDataLoaded = true;
-            $state.loaded();
+            if (this.actionsData.length > 0) {
+              $state.loaded();
+            }
             $state.complete();
           }
         } else {
@@ -209,14 +227,15 @@
               `item/${commentParentId}.json`,
             );
             if (commentParentData !== null) {
-              const commentParentArticleData = await this.fetchCommentParentArticleData(
+              const commentParentPostData = await this.fetchCommentParentPostData(
                 commentParentData,
               );
               if (
-                commentParentArticleData !== null &&
-                commentParentArticleData !== undefined
+                commentParentPostData !== null &&
+                commentParentPostData !== undefined
               ) {
-                actionData.parentArticleTitle = commentParentArticleData.title!;
+                actionData.parentPostTitle = commentParentPostData.title!;
+                actionData.parentPostId = commentParentPostData.id;
               } else {
                 return null;
               }
@@ -227,12 +246,12 @@
         }
         return actionData;
       },
-      async fetchCommentParentArticleData(commentParentData: ActionData) {
+      async fetchCommentParentPostData(commentParentData: ActionData) {
         const commentParentId = commentParentData.parent;
         if (commentParentId) {
           commentParentData = await request(`item/${commentParentId}.json`);
           if (commentParentData !== null) {
-            await this.fetchCommentParentArticleData(commentParentData);
+            await this.fetchCommentParentPostData(commentParentData);
             return;
           }
           return null;
@@ -252,21 +271,12 @@
       background-color: $block-orange-dark;
     }
 
-    &__avatar {
-      align-self: center;
-      width: 160px;
-      height: 160px;
+    .user__avatar {
       margin: 55px 0 40px;
-      overflow: hidden;
-      border: 3px solid $border-grey;
-      border-radius: 50%;
-      box-shadow: rgba($shadow, 0.14) 0 6px 10px 0,
-        rgba($shadow, 0.12) 0 1px 18px 0, rgba($shadow, 0.2) 0 3px 5px -1px;
+    }
 
-      > img {
-        width: 100%;
-        height: 100%;
-      }
+    .user__about {
+      border-radius: 0 0 3px 3px;
     }
 
     &__username {
@@ -279,9 +289,11 @@
 
     &__karma-and-created-timestamp {
       display: flex;
+      align-items: center;
       justify-content: space-around;
       padding: 20px 15px;
       background-color: $block-orange;
+      border-radius: 3px 3px 0 0;
       box-shadow: rgba($shadow, 0.14) 0 2px 2px 0,
         rgba($shadow, 0.2) 0 3px 1px -2px, rgba($shadow, 0.12) 0 1px 5px 0;
     }
@@ -297,6 +309,26 @@
         margin-bottom: 18px;
         font-size: 24px;
       }
+
+      > span:last-child {
+        font-size: 15px;
+      }
+    }
+
+    &__inner {
+      padding: 0 15px;
+    }
+
+    &__about-title {
+      display: block;
+      margin-bottom: 15px;
+      color: $text-orange-pink;
+      font-size: 30px;
+    }
+
+    &__about-text {
+      font-size: 15px;
+      line-height: 26px;
     }
 
     &__actions-title {
@@ -307,16 +339,19 @@
       text-align: center;
     }
 
-    &__actions {
-      padding: 0 15px;
-    }
-
     .user__action {
       margin-bottom: 40px;
 
       &:nth-last-child(2) {
         margin-bottom: 0;
       }
+    }
+
+    &__action-header {
+      display: block;
+      padding: 15px 20px;
+      color: $text-white;
+      line-height: 20px;
     }
   }
 </style>

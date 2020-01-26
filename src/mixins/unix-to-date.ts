@@ -2,7 +2,7 @@ import Vue from 'vue';
 
 export default Vue.extend({
   methods: {
-    convertUnixTimestampToDate(unixTimestamp: number) {
+    unixToDate(unixTimestamp: number) {
       return new Date(unixTimestamp * 1000);
     },
   },
