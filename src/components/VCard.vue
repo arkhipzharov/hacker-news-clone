@@ -31,28 +31,22 @@
         required: false,
         default: true,
       },
-      headerText: {
-        type: String,
-        required: false,
-        default: '',
-      },
     },
     computed: {
       isPassedContentToSlot() {
         return (name: string) => {
-          if (this.$slots[name]) {
-            const vnode = this.$slots[name]![0];
-            // could not just return condition because prettier wraps it with parens
-            // and prop can return undefined
-            // "Type 'boolean | undefined' is not assignable to type 'boolean'"
-            if (
+          const slotData = this.$slots[name];
+          if (slotData) {
+            const vnode = slotData[0];
+            // https://github.com/vuejs/vue/issues/10450
+            return (
+              // check if not passed '' to slot
               vnode.text?.trim().length! > 0 ||
+              // check if passed html to slot
               vnode.children?.length! > 0 ||
+              // check if passed component to slot
               vnode.tag?.includes('vue-component-')
-            ) {
-              return true;
-            }
-            return false;
+            );
           }
           return false;
         };

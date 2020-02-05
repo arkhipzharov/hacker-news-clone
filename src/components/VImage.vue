@@ -16,19 +16,12 @@
   import mixins from 'vue-typed-mixins';
   import optionalHref from '@/mixins/optional-href';
 
-  export default mixins(optionalHref).extend({
-    props: {
-      href: {
-        type: String,
-        required: false,
-        default: undefined,
-      },
-    },
-  });
+  export default mixins(optionalHref).extend({});
 </script>
 
 <style lang="scss">
   .image {
+    display: block;
     height: 170px;
 
     > img {

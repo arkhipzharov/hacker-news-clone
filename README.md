@@ -36,3 +36,8 @@ typescript, how to work with api, and so on
   Or
 
 - `npm run types`
+
+## Other
+
+- If you meet problems refreshing globally imported scss files or svg sprite cache reload webpack
+- Files for debugging are in `.` folder inside chrome dev tools

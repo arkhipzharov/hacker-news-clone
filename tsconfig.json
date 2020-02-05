@@ -28,7 +28,7 @@
   "exclude": [
     "node_modules",
     "src/components/**/*.test.ts",
-    // do not process tests related files bcs typescript.test.json is for this
+    // do not process tests related files bcs jest typescript config is for this
     "src/test/**/*.ts"
   ]
 }

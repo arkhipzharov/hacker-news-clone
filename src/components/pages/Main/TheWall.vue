@@ -7,18 +7,19 @@
       class="wall__post"
       :data="data"
     />
-    <TheInfiniteLoading :handler="loadPostsDataChunk" />
+    <TheInfiniteLoading :loadFun="loadPostsDataChunk" />
   </div>
 </template>
 <!-- eslint-enable -->
 
 <script lang="ts">
   import mixins from 'vue-typed-mixins';
+  import TheInfiniteLoading from '@/components/TheInfiniteLoading';
+  import RptWallPost from './RptWallPost';
+  import resetFactory from '@/mixins/reset-factory';
+  import resetDynamicRoute from '@/mixins/reset-dynamic-route';
   import isItemDataInvalid from '@/ts/helpers/is-item-data-invalid';
   import request from '@/ts/helpers/request';
-  import RptWallPost from '@/components/RptWallPost';
-  import TheInfiniteLoading from '@/components/TheInfiniteLoading';
-  import resetFactory from '@/mixins/reset-factory';
   import ItemData from '@/ts/interfaces/api-data';
 
   interface Data {
@@ -33,6 +34,7 @@
     postsData: ItemData[];
     postDataIdsChunked: number[][];
     postsDataChunkWithoutErrors: ItemData[];
+    wallPostsType: string;
     loadedPostsDataChunksCount: number;
     postsDataChunkErrorsNum: number;
     isPostsDataLoaded: boolean;
@@ -42,12 +44,16 @@
     postsData: [],
     postDataIdsChunked: [],
     postsDataChunkWithoutErrors: [],
+    wallPostsType: '',
     loadedPostsDataChunksCount: 0,
     postsDataChunkErrorsNum: 0,
     isPostsDataLoaded: false,
   };
 
-  export default mixins(resetFactory(dataToReset)).extend({
+  export default mixins(
+    resetFactory<DataToReset>(dataToReset),
+    resetDynamicRoute,
+  ).extend({
     components: {
       RptWallPost,
       TheInfiniteLoading,
@@ -55,13 +61,12 @@
     data() {
       return data;
     },
-    watch: {
-      $route: {
-        immediate: true,
-        handler() {
-          this.reset();
-        },
-      },
+    mounted() {
+      const wallPostsType = this.wallPostsType;
+      if (wallPostsType && wallPostsType !== this.$route.params.wallPostsType) {
+        this.reset();
+        this.$evBus.$emit('re-render-infinite-loading-component');
+      }
     },
     methods: {
       async loadPostsDataChunk($state: {
@@ -72,8 +77,9 @@
           const postDataIdsChunkSize = this.postDataIdsChunkSize;
           let postDataIdsChunked = this.postDataIdsChunked;
           if (postDataIdsChunked.length === 0) {
-            const postDataType = this.$route.name!.toLowerCase();
-            const postDataIds = await request(`${postDataType}stories.json`);
+            const wallPostsType = this.$route.params.wallPostsType;
+            const postDataIds = await request(`${wallPostsType}stories.json`);
+            this.wallPostsType = wallPostsType;
             postDataIdsChunked = postDataIds.reduce(
               (ids: number[][], _id: number, i: number) => {
                 const postDataIdsChunk = postDataIds.slice(
@@ -91,7 +97,7 @@
           }
           const loadedPostsDataChunksCount = this.loadedPostsDataChunksCount;
           const postsDataChunkErrorsNum = this.postsDataChunkErrorsNum;
-          let postsDataChunk: ItemData[] = [];
+          let postsDataChunk: (ItemData | null)[] = [];
           if (
             loadedPostsDataChunksCount < postDataIdsChunked.length &&
             postsDataChunkErrorsNum === 0
@@ -101,7 +107,7 @@
                 postsDataChunkErrorsNum > 0
                   ? loadedPostsDataChunksCount + 1
                   : loadedPostsDataChunksCount
-              ].reduce((proms: Promise<ItemData>[], id: number) => {
+              ].reduce((proms: Promise<ItemData | null>[], id: number) => {
                 if (postsDataChunkErrorsNum > 0) {
                   if (proms.length < postsDataChunkErrorsNum) {
                     proms.push(request(`item/${id}.json`));
@@ -122,14 +128,14 @@
             );
             this.postsDataChunkErrorsNum =
               postDataIdsChunkSize - postsDataChunkWithoutErrors.length;
-            this.postsDataChunkWithoutErrors = postsDataChunkWithoutErrors;
+            this.postsDataChunkWithoutErrors = postsDataChunkWithoutErrors as ItemData[];
             await this.loadPostsDataChunk($state);
             return;
           }
           const postsDataChunkWithoutErrors = this.postsDataChunkWithoutErrors;
           this.postsData.push(
             ...postsDataChunkWithoutErrors,
-            ...postsDataChunk,
+            ...(postsDataChunk as ItemData[]),
           );
           if (postsDataChunkWithoutErrors.length > 0) {
             this.postsDataChunkWithoutErrors = [];

@@ -13,8 +13,8 @@ import './ts/startup';
 Vue.config.productionTip = false;
 
 const app = new Vue({
-  router,
   store,
+  router,
   render: (h) => h(App),
 });
 

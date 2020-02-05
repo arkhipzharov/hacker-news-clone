@@ -9,7 +9,7 @@ declare namespace NodeJS {
   export interface Global {
     // helpers. They are will be available with global.h.helperFunction()
     h: {
-      [propName: string]: Function;
+      [key: string]: Function;
     };
   }
 }

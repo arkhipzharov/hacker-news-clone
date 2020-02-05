@@ -57,9 +57,10 @@
 
 <script lang="ts">
   import mixins from 'vue-typed-mixins';
+  import resetFactory from '@/mixins/reset-factory';
+  import scrollTopStartup from '@/mixins/scroll-top-startup';
   import request from '@/ts/helpers/request';
   import ItemData, { UserData } from '@/ts/interfaces/api-data';
-  import resetFactory from '@/mixins/reset-factory';
 
   interface DataToReset {
     data: ItemData;
@@ -71,18 +72,23 @@
     userKarma: 0,
   };
 
-  export default mixins(resetFactory(dataToReset)).extend({
-    watch: {
-      $route: {
-        immediate: true,
-        async handler() {
-          this.reset();
-          await this.loadPostData();
-        },
-      },
-    },
+  export default mixins(
+    resetFactory<DataToReset>(dataToReset),
+    scrollTopStartup,
+  ).extend({
     async mounted() {
-      this.loadPostData();
+      const postId = this.data?.id?.toString();
+      if (!postId) {
+        await this.loadPostData();
+      } else if (postId !== this.$route.params.id) {
+        this.reset();
+        await this.loadPostData();
+      }
+    },
+    watch: {
+      async $route() {
+        await this.loadPostData();
+      },
     },
     methods: {
       async loadPostData() {

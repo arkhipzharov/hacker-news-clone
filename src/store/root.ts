@@ -3,8 +3,8 @@
 
 import { Module, createMapper } from 'vuex-smart-module';
 
-export const root = new Module({});
+const root = new Module({});
 
 const rootMapper = createMapper(root);
 
-export default rootMapper;
+export { rootMapper as default, root };

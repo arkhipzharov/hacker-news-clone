@@ -1,7 +1,7 @@
 import wrapperFactory from './wrapper-factory';
 
 interface Globals {
-  [propName: string]: Function;
+  [key: string]: Function;
 }
 
 const globals: Globals = {

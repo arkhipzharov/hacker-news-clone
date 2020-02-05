@@ -3,7 +3,7 @@
   <div class="user">
     <div class="user__account-info">
       <VAvatar class="user__avatar" />
-      <span class="user__username">{{ user.id || '...' }}</span>
+      <span class="user__username">{{ user && user.id || '...' }}</span>
       <div class="user__karma-and-created-timestamp">
         <div class="user__karma-and-created-timestamp-item">
           <span>{{ user.karma || '...' }}</span>
@@ -13,9 +13,7 @@
           <span>
             {{
               user.created
-                ? $moment(unixToDate(user.created)).format(
-                  'YYYY-MM-DD',
-                )
+                ? $moment(unixToDate(user.created)).format('YYYY-MM-DD')
                 : '...'
             }}
           </span>
@@ -25,16 +23,20 @@
     </div>
     <div class="user__inner">
       <VCard class="user__about">
-        <template v-if="user.about || (isRouteChanged && false)">
+        <template v-if="user.about || (actionsData.length > 0 && false)">
           <span class="user__about-title">About me</span>
-          <p class="user__about-text">{{ $stripHtml(user.about || '...') }}</p>
+          <p class="user__about-text">
+            {{ $stripHtml(user.about || '...') }}
+          </p>
         </template>
       </VCard>
       <span class="user__actions-title">Recent Activity</span>
       <VCard
         v-for="(data, index) in actionsData"
         :key="index"
-        :class="['user__action', { 'card--submitted': data.type !== 'comment' }]"
+        :class="[
+          'user__action', { 'card--submitted': data.type !== 'comment' }
+        ]"
       >
         <template v-slot:header>
           <router-link
@@ -44,12 +46,13 @@
                 (data.type !== 'comment' && data.id) || data.parentPostId
               }`
             "
-            @click.prevent
           >
             {{
               `
                 ${data.type === 'comment' ? 'Commented: ' : 'Submitted: '}
-                "${data.type === 'comment' ? data.parentPostTitle : data.title}"
+                "${
+                data.type === 'comment' ? data.parentPostTitle : data.title
+              }"
               `
             }}
           </router-link>
@@ -58,7 +61,7 @@
           {{ $stripHtml(data.text || '') | truncate(180) }}
         </template>
       </VCard>
-      <TheInfiniteLoading :handler="loadActionsDataChunk" />
+      <TheInfiniteLoading :loadFun="loadActionsDataChunk" />
     </div>
   </div>
 </template>
@@ -66,12 +69,14 @@
 
 <script lang="ts">
   import mixins from 'vue-typed-mixins';
-  import request from '@/ts/helpers/request';
   import TheInfiniteLoading from '@/components/TheInfiniteLoading';
   import resetFactory from '@/mixins/reset-factory';
+  import resetDynamicRoute from '@/mixins/reset-dynamic-route';
+  import scrollTopStartup from '@/mixins/scroll-top-startup';
   import unixToDate from '@/mixins/unix-to-date';
-  import ItemData, { UserData } from '@/ts/interfaces/api-data';
+  import request from '@/ts/helpers/request';
   import isItemDataInvalid from '@/ts/helpers/is-item-data-invalid';
+  import ItemData, { UserData } from '@/ts/interfaces/api-data';
 
   interface ActionData extends ItemData {
     parentPostTitle: string;
@@ -80,15 +85,14 @@
 
   interface Data {
     actionDataIdsChunkSize: number;
-    user: UserData;
   }
 
   const data: Data = {
     actionDataIdsChunkSize: 3,
-    user: {} as UserData,
   };
 
   interface DataToReset {
+    user: UserData;
     actionsData: ItemData[];
     actionDataIdsChunked: number[][];
     actionsDataChunkWithoutErrors: ItemData[];
@@ -98,6 +102,7 @@
   }
 
   const dataToReset: DataToReset = {
+    user: {} as UserData,
     actionsData: [],
     actionDataIdsChunked: [],
     actionsDataChunkWithoutErrors: [],
@@ -106,25 +111,24 @@
     isActionsDataLoaded: false,
   };
 
-  export default mixins(unixToDate, resetFactory(dataToReset)).extend({
+  export default mixins(
+    resetFactory<DataToReset>(dataToReset),
+    resetDynamicRoute,
+    scrollTopStartup,
+    unixToDate,
+  ).extend({
     components: {
       TheInfiniteLoading,
     },
     data() {
       return data;
     },
-    watch: {
-      $route: {
-        immediate: true,
-        handler() {
-          this.reset();
-        },
-      },
-    },
-    computed: {
-      isRouteChanged() {
-        return this.actionsData.length > 0;
-      },
+    mounted() {
+      const username = this.user?.id;
+      if (username && username !== this.$route.params.username) {
+        this.reset();
+        this.$evBus.$emit('re-render-infinite-loading-component');
+      }
     },
     methods: {
       async loadActionsDataChunk($state: {
@@ -157,7 +161,7 @@
           const loadedActionsDataChunksCount = this
             .loadedActionsDataChunksCount;
           const actionsDataChunkErrorsNum = this.actionsDataChunkErrorsNum;
-          let actionsDataChunk: ItemData[] = [];
+          let actionsDataChunk: (ItemData | null)[] = [];
           if (
             loadedActionsDataChunksCount < actionDataIdsChunked.length &&
             actionsDataChunkErrorsNum === 0
@@ -188,7 +192,7 @@
             );
             this.actionsDataChunkErrorsNum =
               actionDataIdsChunkSize - actionsDataChunkWithoutErrors.length;
-            this.actionsDataChunkWithoutErrors = actionsDataChunkWithoutErrors;
+            this.actionsDataChunkWithoutErrors = actionsDataChunkWithoutErrors as ItemData[];
             await this.loadActionsDataChunk($state);
             return;
           }
@@ -197,7 +201,7 @@
           const actionsData = this.actionsData;
           actionsData.push(
             ...actionsDataChunkWithoutErrors,
-            ...actionsDataChunk,
+            ...(actionsDataChunk as ItemData[]),
           );
           this.actionsData = actionsData;
           if (actionsDataChunkWithoutErrors.length > 0) {

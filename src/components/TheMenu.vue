@@ -22,13 +22,13 @@
       :key="index"
       class="menu__item-wrapper"
     >
-      <router-link
+      <a
         class="menu__item"
-        :to="`/${name.toLowerCase()}`"
+        @click.prevent="possiblyRedirectAndCloseMenu(name)"
       >
         <span>{{ name }}</span>
         <VIcon :href="'chevron-right'" />
-      </router-link>
+      </a>
     </div>
     <div class="menu__item-wrapper">
       <button class="menu__item">
@@ -60,6 +60,16 @@
   export default Vue.extend({
     data() {
       return data;
+    },
+    methods: {
+      possiblyRedirectAndCloseMenu(name: string) {
+        name = name.toLowerCase();
+        if (this.$route.params.wallPostsType === name) {
+          this.$evBus.$emit('close-menu-in-header-state');
+        } else {
+          this.$router.push(name);
+        }
+      },
     },
   });
 </script>

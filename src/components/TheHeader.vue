@@ -65,14 +65,26 @@
         },
       },
     },
+    mounted() {
+      this.$evBus.$on('close-menu-in-header-state', () => {
+        this.toggleMenu(false);
+      });
+    },
     methods: {
       toggleMenu(isClickaway: boolean) {
+        const isMenuOpened = this.isMenuOpened;
+        /*
+          clickaway is triggered when you click outside of menu, and toggle
+          menu button is outside of it too, so we need to handle that.
+          Remaining ability to click toggle menu button when menu opened
+          for browser feedback with blue highlight after click
+        */
         if (isClickaway) {
-          if (this.isMenuOpened) {
+          if (isMenuOpened) {
             this.isMenuOpened = false;
           }
         } else {
-          this.isMenuOpened = !this.isMenuOpened;
+          this.isMenuOpened = !isMenuOpened;
         }
       },
     },
@@ -88,6 +100,7 @@
     display: flex;
     justify-content: space-between;
     width: 100%;
+    min-width: 320px;
     height: 50px;
     background-color: $block-orange;
     box-shadow: rgba($shadow, 0.22) 0 3px 3px;

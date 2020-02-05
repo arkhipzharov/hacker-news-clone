@@ -4,7 +4,7 @@
     <!--
       MDN says that using xlink:href is not recommended, therefore used href
     -->
-    <use :href="'#' + href"></use>
+    <use :href="`#${href}`"></use>
   </svg>
 </template>
 <!-- eslint-enable -->

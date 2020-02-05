@@ -90,6 +90,7 @@
     }
 
     &__title {
+      display: block;
       margin-bottom: 20px;
       color: $text-orange-pink;
       font-size: 24px;

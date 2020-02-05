@@ -8,6 +8,7 @@ a {
   color: inherit;
   text-decoration: none;
   cursor: pointer;
+  // break word if it's wider than container
   word-break: break-word;
 }
 
@@ -17,6 +18,7 @@ span {
 
 svg {
   display: block;
+  // display current text color
   fill: currentColor;
 }
 
@@ -29,9 +31,10 @@ button {
   color: inherit;
   font-weight: inherit;
   line-height: inherit;
+  // because if parent have rgba color and child inherits it all opacities add up
   background-color: transparent;
   border: 0;
-  outline: none;
+  // outline: none;
   cursor: pointer;
   display: block;
 }
@@ -52,14 +55,14 @@ input {
   display: block;
 }
 
-// Убирает стрелки у input типа number
+// Removes arrows from input[type='number']
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   margin: 0;
   -webkit-appearance: none;
 }
 
-// Это тоже убирает стрелки
+// Removes arrows too
 input[type='number'] {
   -moz-appearance: textfield;
 }
