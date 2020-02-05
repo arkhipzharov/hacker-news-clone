@@ -67,7 +67,7 @@
         if (this.$route.params.wallPostsType === name) {
           this.$evBus.$emit('close-menu-in-header-state');
         } else {
-          this.$router.push(name);
+          this.$router.push(`/${name}`);
         }
       },
     },
