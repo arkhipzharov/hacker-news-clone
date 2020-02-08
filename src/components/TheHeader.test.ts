@@ -1,9 +1,22 @@
 // this is example of how unit test should look
 import Vue from 'vue';
+import { createLocalVue } from '@vue/test-utils';
 import TheHeader from './TheHeader.vue';
 import TheMenu from './TheMenu.vue';
 
 const factory = global.h.wrapperFactory(TheHeader);
+
+const eventBus = new Vue();
+
+// https://forum.vuejs.org/t/how-to-mock-event-bus-in-vue-test-utils/22815/5
+const prototypeHelpers = {
+  install(v) {
+    v.prototype.$evBus = eventBus;
+  },
+};
+
+const localVue = createLocalVue();
+localVue.use(prototypeHelpers);
 
 describe('TheHeader', () => {
   let wrapper;
@@ -11,6 +24,7 @@ describe('TheHeader', () => {
   test('calls function when click toggle menu button', () => {
     const toggleMenu = jest.fn();
     wrapper = factory({
+      localVue,
       stubs: ['router-link'],
       methods: {
         toggleMenu,
@@ -25,6 +39,7 @@ describe('TheHeader', () => {
   test('triggers clickaway directive when click outside of menu', () => {
     const onClickaway = jest.fn();
     wrapper = factory({
+      localVue,
       stubs: ['router-link'],
       directives: {
         onClickaway,
@@ -39,6 +54,7 @@ describe('TheHeader', () => {
   test('triggers clickaway directive when click inside of menu', () => {
     const onClickaway = jest.fn();
     wrapper = factory({
+      localVue,
       stubs: ['router-link'],
       directives: {
         onClickaway,
@@ -53,6 +69,7 @@ describe('TheHeader', () => {
   test('triggers clickaway directive when click toggle menu button', () => {
     const onClickaway = jest.fn();
     wrapper = factory({
+      localVue,
       stubs: ['router-link'],
       directives: {
         onClickaway,
@@ -66,6 +83,7 @@ describe('TheHeader', () => {
 
   test('adds class to menu when click toggle button', async () => {
     wrapper = factory({
+      localVue,
       stubs: ['router-link'],
     });
 
@@ -77,6 +95,7 @@ describe('TheHeader', () => {
 
   test('removes class from menu when click toggle button', async () => {
     wrapper = factory({
+      localVue,
       stubs: ['router-link'],
     });
 
