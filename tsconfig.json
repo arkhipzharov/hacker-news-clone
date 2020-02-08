@@ -1,10 +1,11 @@
 {
   "compilerOptions": {
-    "target": "es2015",
+    // es2020 instead of esnext because it throws unexpected token error on
+    // optional chaining
+    "target": "es2020",
     // for webpack config to be written with typescript
     "module": "commonjs",
     "strict": true,
-    "noImplicitReturns": true,
     "noUnusedParameters": true,
     "noUnusedLocals": true,
     // for webpack config to be written with typescript

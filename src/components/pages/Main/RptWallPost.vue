@@ -19,14 +19,34 @@
           :to="`/post/${data.id}`"
         >
           <VIcon :href="'heart'" />
-          <span>{{ data.score }} points</span>
+          <span>
+            {{
+              `
+                ${data.score} ${
+                  adoptWordEndingsToNumber(
+                    data.score, ['point', 'points', 'points']
+                  )
+                }
+              `
+            }}
+          </span>
         </router-link>
         <router-link
+          v-if="data.descendants || data.descendants === 0"
           class="wall-post__actions-item"
           :to="`/post/${data.id}`"
         >
           <VIcon :href="'comment'" />
-          <span>{{ data.descendants }} comments</span>
+          <span>
+            {{
+              `
+                ${data.descendants} ${
+                  adoptWordEndingsToNumber(
+                    data.descendants, ['comment', 'comments', 'comments'])
+                }
+              `
+            }}
+          </span>
         </router-link>
       </div>
       <p class="wall-post__text">
@@ -71,6 +91,25 @@
       data: {
         type: Object,
         required: true,
+      },
+    },
+    methods: {
+      // ru and en
+      // https://realadmin.ru/coding/sklonenie-na-javascript.html (ru)
+      adoptWordEndingsToNumber(number: any, wordsWithAllEndings: string[]) {
+        number = Math.abs(number) % 100;
+        const n1 = number % 10;
+        let index;
+        if (number > 10 && number < 20) {
+          index = 2;
+        } else if (n1 > 1 && n1 < 5) {
+          index = 1;
+        } else if (n1 === 1) {
+          index = 0;
+        } else {
+          index = 2;
+        }
+        return wordsWithAllEndings[index];
       },
     },
   });

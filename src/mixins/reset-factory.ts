@@ -3,9 +3,19 @@
 // because of it too
 //
 // https://stackoverflow.com/a/54273687
+//
+// Also if passing all data into a mixin, it will be resetted on every page
+// re-enter, except arrays, and you must have data() in component to avoid this
 
 import Vue from 'vue';
 
+/*
+  "Element implicitly has an 'any' type because expression of type 'string'
+  can't be used to index type 'unknown'. No index signature with a parameter of
+  type 'string' was found on type 'unknown'""
+
+  https://github.com/microsoft/TypeScript/issues/31661#issuecomment-497137168
+*/
 interface IndexSignatureFix {
   [key: string]: any;
 }

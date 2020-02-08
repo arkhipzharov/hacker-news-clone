@@ -127,12 +127,24 @@ module.exports = {
       "'data' is already declared in the upper scope"
     */
     'no-shadow': 'off',
-    'no-console': [
-      'error',
-      {
-        allow: ['error'],
-      },
-    ],
+    /*
+      for (const id of commentTreeItemIds) {
+        const comment = await request(`item/${id}.json`);
+        ...
+      }
+    */
+    'no-await-in-loop': 'off',
+    /*
+      for (const id of commentTreeItemIds) {
+        const comment = await request(`item/${id}.json`);
+        ...
+      }
+
+      'iterators/generators require regenerator-runtime, which is too
+      heavyweight for this guide to allow them. Separately, loops should be
+      avoided in favor of array iterations'
+    */
+    'no-restricted-syntax': 'off',
     'indent': [
       'error',
       2,
@@ -150,12 +162,12 @@ module.exports = {
       },
     ],
     /*
-      import './VueComponent';
-
-      Said that file extension is misssing, unable to fix it for now, but maybe
-      it's possible
+      "Unable to resolve path to module '@/components/TheComponent'"
     */
     'import/no-unresolved': 'off',
+    /*
+      'Missing file extension for "@/components/TheInfiniteLoading"'
+    */
     'import/extensions': 'off',
     /*
       import { shallowMount } from '@vue/test-utils';
@@ -197,7 +209,44 @@ module.exports = {
           </script>
         */
         baseIndent: 1,
-        ignores: ["IfStatement"],
+        /*
+          let actionsDataChunk: (
+            | CommentData
+            | ItemData
+            | null
+            | undefined
+          )[] = [];
+
+          'expected 10 spaces but got 8'
+        */
+        ignores: [":expression"],
+      },
+    ],
+    'vue/html-indent': [
+      'error',
+      2,
+      {
+        /*
+          {{ `
+            ${data.score} ${
+            adoptWordEndingsToNumber(
+              data.score, ['point', 'points', 'points'])
+            }
+          ` }}
+
+          instead of
+
+          {{`
+            ${data.score} ${
+              adoptWordEndingsToNumber(
+                data.score, ['point', 'points', 'points']
+              )
+            }
+          `}}
+
+          https://stackoverflow.com/a/53094449 - solution
+        */
+        ignores: ["TemplateLiteral > *"],
       },
     ],
     'vue/html-self-closing': [
@@ -245,14 +294,13 @@ module.exports = {
     // statements, and it's feeling overhead to write them all
     '@typescript-eslint/explicit-function-return-type': 'off',
     /*
-      declare namespace NodeJS {
-        export interface Global {
-          [propName: string]: any;
-        }
-      }
-
-      for extending global object and don't import helper functions every time
-      in unit tests
+      watch: {
+        // 'this: any' because "Property 'reset' does not exist on type
+        // 'CombinedVueInstance...'"
+        $route(this: any) {
+          this.reset();
+        },
+      },
     */
     '@typescript-eslint/no-explicit-any': 'off',
   },

@@ -14,13 +14,14 @@
 
 <script lang="ts">
   import mixins from 'vue-typed-mixins';
-  import TheInfiniteLoading from '@/components/TheInfiniteLoading';
-  import RptWallPost from './RptWallPost';
   import resetFactory from '@/mixins/reset-factory';
   import resetDynamicRoute from '@/mixins/reset-dynamic-route';
-  import isItemDataInvalid from '@/ts/helpers/is-item-data-invalid';
+  import isItemDataValid from '@/ts/helpers/is-item-data-valid';
   import request from '@/ts/helpers/request';
   import ItemData from '@/ts/interfaces/api-data';
+  import StateParam from '@/ts/interfaces/infinite-loading';
+  import TheInfiniteLoading from '@/components/TheInfiniteLoading';
+  import RptWallPost from './RptWallPost';
 
   interface Data {
     postDataIdsChunkSize: number;
@@ -33,21 +34,17 @@
   interface DataToReset {
     postsData: ItemData[];
     postDataIdsChunked: number[][];
-    postsDataChunkWithoutErrors: ItemData[];
     wallPostsType: string;
     loadedPostsDataChunksCount: number;
-    postsDataChunkErrorsNum: number;
-    isPostsDataLoaded: boolean;
+    isReEnteredPage: boolean;
   }
 
   const dataToReset: DataToReset = {
     postsData: [],
     postDataIdsChunked: [],
-    postsDataChunkWithoutErrors: [],
     wallPostsType: '',
     loadedPostsDataChunksCount: 0,
-    postsDataChunkErrorsNum: 0,
-    isPostsDataLoaded: false,
+    isReEnteredPage: false,
   };
 
   export default mixins(
@@ -63,95 +60,76 @@
     },
     mounted() {
       const wallPostsType = this.wallPostsType;
-      if (wallPostsType && wallPostsType !== this.$route.params.wallPostsType) {
-        this.reset();
-        this.$evBus.$emit('re-render-infinite-loading-component');
+      if (wallPostsType) {
+        this.isReEnteredPage = true;
+        if (wallPostsType !== this.$route.params.wallPostsType) {
+          this.reset();
+          this.$evBus.$emit('re-render-infinite-loading-component');
+        }
       }
     },
     methods: {
-      async loadPostsDataChunk($state: {
-        loaded: () => void;
-        complete: () => void;
-      }) {
-        if (!this.isPostsDataLoaded) {
+      async loadPostsDataChunk($state: StateParam) {
+        let postDataIdsChunked = this.postDataIdsChunked;
+        if (postDataIdsChunked.length === 0) {
+          const wallPostsType = this.$route.params.wallPostsType;
+          let postDataIds = await request(`${wallPostsType}stories.json`);
+          const postsData = this.postsData;
+          if (this.isReEnteredPage && postsData.length > 0) {
+            postDataIds = postDataIds.slice(
+              postDataIds.findIndex((id: number) => {
+                return id === postsData[postsData.length - 1].id;
+              }) + 1,
+            );
+          }
+          this.wallPostsType = wallPostsType;
           const postDataIdsChunkSize = this.postDataIdsChunkSize;
-          let postDataIdsChunked = this.postDataIdsChunked;
+          postDataIdsChunked = postDataIds.reduce(
+            (ids: number[][], _id: number, i: number) => {
+              const postDataIdsChunk = postDataIds.slice(
+                i * postDataIdsChunkSize,
+                (i + 1) * postDataIdsChunkSize,
+              );
+              if (postDataIdsChunk.length > 0) {
+                ids.push(postDataIdsChunk);
+              }
+              return ids;
+            },
+            [],
+          );
           if (postDataIdsChunked.length === 0) {
-            const wallPostsType = this.$route.params.wallPostsType;
-            const postDataIds = await request(`${wallPostsType}stories.json`);
-            this.wallPostsType = wallPostsType;
-            postDataIdsChunked = postDataIds.reduce(
-              (ids: number[][], _id: number, i: number) => {
-                const postDataIdsChunk = postDataIds.slice(
-                  i * postDataIdsChunkSize,
-                  (i + 1) * postDataIdsChunkSize,
-                );
-                if (postDataIdsChunk.length > 0) {
-                  ids.push(postDataIdsChunk);
-                }
-                return ids;
-              },
-              [],
-            );
-            this.postDataIdsChunked = postDataIdsChunked;
-          }
-          const loadedPostsDataChunksCount = this.loadedPostsDataChunksCount;
-          const postsDataChunkErrorsNum = this.postsDataChunkErrorsNum;
-          let postsDataChunk: (ItemData | null)[] = [];
-          if (
-            loadedPostsDataChunksCount < postDataIdsChunked.length &&
-            postsDataChunkErrorsNum === 0
-          ) {
-            postsDataChunk = await Promise.all(
-              postDataIdsChunked[
-                postsDataChunkErrorsNum > 0
-                  ? loadedPostsDataChunksCount + 1
-                  : loadedPostsDataChunksCount
-              ].reduce((proms: Promise<ItemData | null>[], id: number) => {
-                if (postsDataChunkErrorsNum > 0) {
-                  if (proms.length < postsDataChunkErrorsNum) {
-                    proms.push(request(`item/${id}.json`));
-                  }
-                } else {
-                  proms.push(request(`item/${id}.json`));
-                }
-                return proms;
-              }, []),
-            );
-          }
-          if (postsDataChunkErrorsNum > 0) {
-            this.postsDataChunkErrorsNum = 0;
-          }
-          if (postsDataChunk.some(isItemDataInvalid())) {
-            const postsDataChunkWithoutErrors = postsDataChunk.filter(
-              isItemDataInvalid(true),
-            );
-            this.postsDataChunkErrorsNum =
-              postDataIdsChunkSize - postsDataChunkWithoutErrors.length;
-            this.postsDataChunkWithoutErrors = postsDataChunkWithoutErrors as ItemData[];
-            await this.loadPostsDataChunk($state);
+            $state.complete();
             return;
           }
-          const postsDataChunkWithoutErrors = this.postsDataChunkWithoutErrors;
-          this.postsData.push(
-            ...postsDataChunkWithoutErrors,
-            ...(postsDataChunk as ItemData[]),
-          );
-          if (postsDataChunkWithoutErrors.length > 0) {
-            this.postsDataChunkWithoutErrors = [];
-          }
-          if (loadedPostsDataChunksCount < postDataIdsChunked.length - 1) {
-            this.loadedPostsDataChunksCount++;
+          this.postDataIdsChunked = postDataIdsChunked;
+        }
+        const loadedPostsDataChunksCount = this.loadedPostsDataChunksCount;
+        let postsDataChunk: (ItemData | null)[] = [];
+        postsDataChunk = await Promise.all(
+          postDataIdsChunked[loadedPostsDataChunksCount].map((id) => {
+            return request(`item/${id}.json`);
+          }),
+        );
+        postsDataChunk = postsDataChunk.filter((data) => {
+          return isItemDataValid(data);
+        });
+        if (postsDataChunk.length > 0) {
+          this.postsData.push(...(postsDataChunk as ItemData[]));
+        } else if (loadedPostsDataChunksCount < postDataIdsChunked.length - 1) {
+          this.loadedPostsDataChunksCount++;
+          await this.loadPostsDataChunk($state);
+        }
+        if (loadedPostsDataChunksCount < postDataIdsChunked.length - 1) {
+          this.loadedPostsDataChunksCount++;
+          if (this.postsData.length > 0) {
             $state.loaded();
           } else {
-            this.isPostsDataLoaded = true;
-            if (this.postsData.length > 0) {
-              $state.loaded();
-            }
             $state.complete();
           }
         } else {
-          $state.loaded();
+          if (this.postsData.length > 0) {
+            $state.loaded();
+          }
           $state.complete();
         }
       },

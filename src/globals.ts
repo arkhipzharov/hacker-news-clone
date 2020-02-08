@@ -1,11 +1,9 @@
 import Vue from 'vue';
-import Vuebar from 'vuebar';
 import VueTruncate from 'vue-truncate-filter';
 import moment from 'moment';
 import stripHtml from 'string-strip-html';
 import './reusable-global-components';
 
-Vue.use(Vuebar);
 Vue.use(VueTruncate);
 
 // using prototype to not import things every time

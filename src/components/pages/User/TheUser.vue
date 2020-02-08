@@ -69,16 +69,17 @@
 
 <script lang="ts">
   import mixins from 'vue-typed-mixins';
-  import TheInfiniteLoading from '@/components/TheInfiniteLoading';
   import resetFactory from '@/mixins/reset-factory';
   import resetDynamicRoute from '@/mixins/reset-dynamic-route';
   import scrollTopStartup from '@/mixins/scroll-top-startup';
   import unixToDate from '@/mixins/unix-to-date';
   import request from '@/ts/helpers/request';
-  import isItemDataInvalid from '@/ts/helpers/is-item-data-invalid';
+  import isItemDataValid from '@/ts/helpers/is-item-data-valid';
   import ItemData, { UserData } from '@/ts/interfaces/api-data';
+  import StateParam from '@/ts/interfaces/infinite-loading';
+  import TheInfiniteLoading from '@/components/TheInfiniteLoading';
 
-  interface ActionData extends ItemData {
+  interface CommentData extends ItemData {
     parentPostTitle: string;
     parentPostId: number;
   }
@@ -95,20 +96,18 @@
     user: UserData;
     actionsData: ItemData[];
     actionDataIdsChunked: number[][];
-    actionsDataChunkWithoutErrors: ItemData[];
     loadedActionsDataChunksCount: number;
-    actionsDataChunkErrorsNum: number;
-    isActionsDataLoaded: boolean;
+    isReEnteredPage: boolean;
+    currentCommentParentData: ItemData;
   }
 
   const dataToReset: DataToReset = {
     user: {} as UserData,
     actionsData: [],
     actionDataIdsChunked: [],
-    actionsDataChunkWithoutErrors: [],
     loadedActionsDataChunksCount: 0,
-    actionsDataChunkErrorsNum: 0,
-    isActionsDataLoaded: false,
+    isReEnteredPage: false,
+    currentCommentParentData: {} as ItemData,
   };
 
   export default mixins(
@@ -125,142 +124,114 @@
     },
     mounted() {
       const username = this.user?.id;
-      if (username && username !== this.$route.params.username) {
-        this.reset();
-        this.$evBus.$emit('re-render-infinite-loading-component');
+      if (username) {
+        this.isReEnteredPage = true;
+        if (username !== this.$route.params.username) {
+          this.reset();
+          this.$evBus.$emit('re-render-infinite-loading-component');
+        }
       }
     },
     methods: {
-      async loadActionsDataChunk($state: {
-        loaded: () => void;
-        complete: () => void;
-      }) {
-        if (!this.isActionsDataLoaded) {
+      async loadActionsDataChunk($state: StateParam) {
+        let actionDataIdsChunked = this.actionDataIdsChunked;
+        if (actionDataIdsChunked.length === 0) {
           const actionDataIdsChunkSize = this.actionDataIdsChunkSize;
-          let actionDataIdsChunked = this.actionDataIdsChunked;
+          const username = this.$route.params.username;
+          const userData: UserData = await request(`user/${username}.json`);
+          this.user = userData;
+          let actionDataIds = userData.submitted;
+          const actionsData = this.actionsData;
+          if (this.isReEnteredPage && actionsData.length > 0) {
+            actionDataIds = actionDataIds.slice(
+              actionDataIds.findIndex((id) => {
+                return id === actionsData[actionsData.length - 1].id;
+              }) + 1,
+            );
+          }
+          actionDataIdsChunked = actionDataIds.reduce(
+            (ids: number[][], _id: number, i: number) => {
+              const actionDataIdsChunk = actionDataIds.slice(
+                i * actionDataIdsChunkSize,
+                (i + 1) * actionDataIdsChunkSize,
+              );
+              if (actionDataIdsChunk.length > 0) {
+                ids.push(actionDataIdsChunk);
+              }
+              return ids;
+            },
+            [],
+          );
           if (actionDataIdsChunked.length === 0) {
-            const username = this.$route.params.username;
-            const userData: UserData = await request(`user/${username}.json`);
-            this.user = userData;
-            const actionDataIds = userData.submitted;
-            actionDataIdsChunked = actionDataIds.reduce(
-              (ids: number[][], _id: number, i: number) => {
-                const actionDataIdsChunk = actionDataIds.slice(
-                  i * actionDataIdsChunkSize,
-                  (i + 1) * actionDataIdsChunkSize,
-                );
-                if (actionDataIdsChunk.length > 0) {
-                  ids.push(actionDataIdsChunk);
-                }
-                return ids;
-              },
-              [],
-            );
-            this.actionDataIdsChunked = actionDataIdsChunked;
-          }
-          const loadedActionsDataChunksCount = this
-            .loadedActionsDataChunksCount;
-          const actionsDataChunkErrorsNum = this.actionsDataChunkErrorsNum;
-          let actionsDataChunk: (ItemData | null)[] = [];
-          if (
-            loadedActionsDataChunksCount < actionDataIdsChunked.length &&
-            actionsDataChunkErrorsNum === 0
-          ) {
-            actionsDataChunk = await Promise.all(
-              actionDataIdsChunked[
-                actionsDataChunkErrorsNum > 0
-                  ? loadedActionsDataChunksCount + 1
-                  : loadedActionsDataChunksCount
-              ].reduce((proms: Promise<ItemData | null>[], id: number) => {
-                if (actionsDataChunkErrorsNum > 0) {
-                  if (proms.length < actionsDataChunkErrorsNum) {
-                    proms.push(this.fetchActionData(id));
-                  }
-                } else {
-                  proms.push(this.fetchActionData(id));
-                }
-                return proms;
-              }, []),
-            );
-          }
-          if (actionsDataChunkErrorsNum > 0) {
-            this.actionsDataChunkErrorsNum = 0;
-          }
-          if (actionsDataChunk.some(isItemDataInvalid())) {
-            const actionsDataChunkWithoutErrors = actionsDataChunk.filter(
-              isItemDataInvalid(true),
-            );
-            this.actionsDataChunkErrorsNum =
-              actionDataIdsChunkSize - actionsDataChunkWithoutErrors.length;
-            this.actionsDataChunkWithoutErrors = actionsDataChunkWithoutErrors as ItemData[];
-            await this.loadActionsDataChunk($state);
+            $state.complete();
             return;
           }
-          const actionsDataChunkWithoutErrors = this
-            .actionsDataChunkWithoutErrors;
-          const actionsData = this.actionsData;
-          actionsData.push(
-            ...actionsDataChunkWithoutErrors,
-            ...(actionsDataChunk as ItemData[]),
+          this.actionDataIdsChunked = actionDataIdsChunked;
+        }
+        const loadedActionsDataChunksCount = this.loadedActionsDataChunksCount;
+        let actionsDataChunk: (
+          | CommentData
+          | ItemData
+          | null
+          | undefined
+        )[] = [];
+        actionsDataChunk = await Promise.all(
+          actionDataIdsChunked[loadedActionsDataChunksCount].map((id) => {
+            return this.fetchActionData(id);
+          }),
+        );
+        actionsDataChunk = actionsDataChunk.filter((data) => {
+          return isItemDataValid(data);
+        });
+        if (actionsDataChunk.length > 0) {
+          this.actionsData.push(
+            ...(actionsDataChunk as (ItemData | CommentData)[]),
           );
-          this.actionsData = actionsData;
-          if (actionsDataChunkWithoutErrors.length > 0) {
-            this.actionsDataChunkWithoutErrors = [];
-          }
-          if (loadedActionsDataChunksCount < actionDataIdsChunked.length - 1) {
-            this.loadedActionsDataChunksCount++;
+        } else if (
+          loadedActionsDataChunksCount <
+          actionDataIdsChunked.length - 1
+        ) {
+          this.loadedActionsDataChunksCount++;
+          await this.loadActionsDataChunk($state);
+        }
+        if (loadedActionsDataChunksCount < actionDataIdsChunked.length - 1) {
+          this.loadedActionsDataChunksCount++;
+          if (this.actionsData.length > 0) {
             $state.loaded();
           } else {
-            this.isActionsDataLoaded = true;
-            if (this.actionsData.length > 0) {
-              $state.loaded();
-            }
             $state.complete();
           }
         } else {
-          $state.loaded();
+          if (this.actionsData.length > 0) {
+            $state.loaded();
+          }
           $state.complete();
         }
       },
       async fetchActionData(id: number) {
-        const actionData: ActionData = await request(`item/${id}.json`);
-        if (actionData !== null) {
-          const commentParentId = actionData.parent;
-          if (commentParentId) {
-            const commentParentData: ActionData = await request(
-              `item/${commentParentId}.json`,
-            );
-            if (commentParentData !== null) {
-              const commentParentPostData = await this.fetchCommentParentPostData(
-                commentParentData,
-              );
-              if (
-                commentParentPostData !== null &&
-                commentParentPostData !== undefined
-              ) {
-                actionData.parentPostTitle = commentParentPostData.title!;
-                actionData.parentPostId = commentParentPostData.id;
-              } else {
-                return null;
-              }
-            } else {
-              return null;
-            }
+        const actionData: CommentData = await request(`item/${id}.json`);
+        if (isItemDataValid(actionData)) {
+          await this.fetchCommentParentPostData(actionData);
+          const commentParentPostData = this.currentCommentParentData;
+          if (commentParentPostData) {
+            actionData.parentPostTitle = commentParentPostData.title!;
+            actionData.parentPostId = commentParentPostData.id;
           }
+          return actionData;
         }
-        return actionData;
       },
-      async fetchCommentParentPostData(commentParentData: ActionData) {
-        const commentParentId = commentParentData.parent;
+      async fetchCommentParentPostData(actionData: CommentData) {
+        const commentParentId = actionData.parent;
         if (commentParentId) {
-          commentParentData = await request(`item/${commentParentId}.json`);
-          if (commentParentData !== null) {
+          const commentParentData: CommentData = await request(
+            `item/${commentParentId}.json`,
+          );
+          if (isItemDataValid(commentParentData)) {
             await this.fetchCommentParentPostData(commentParentData);
-            return;
           }
-          return null;
+        } else {
+          this.currentCommentParentData = actionData;
         }
-        return commentParentData;
       },
     },
   });

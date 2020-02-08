@@ -1,17 +1,17 @@
 <!-- eslint-disable prettier/prettier -->
 <template>
   <!--
-    :key for component re-render to trigger infinite loading when navigate
-    and only changing route params
+    :identifier for component re-render to trigger infinite loading when
+    navigate and only changing route params
   -->
   <InfiniteLoading
-    :key="isComponentReRendered"
+    :identifier="isComponentReRendered"
     spinner="waveDots"
     :distance="300"
     @infinite="loadFun"
   >
     <div slot="no-more">No more data</div>
-    <div slot="no-results">No results</div>
+    <div slot="no-results">No data</div>
   </InfiniteLoading>
 </template>
 <!-- eslint-enable -->
