@@ -1,5 +1,5 @@
 // this is example of how unit test should look
-import Vue from 'vue';
+import Vue, { VueConstructor } from 'vue';
 import { createLocalVue } from '@vue/test-utils';
 import TheHeader from './TheHeader.vue';
 import TheMenu from './TheMenu.vue';
@@ -10,7 +10,7 @@ const eventBus = new Vue();
 
 // https://forum.vuejs.org/t/how-to-mock-event-bus-in-vue-test-utils/22815/5
 const prototypeHelpers = {
-  install(v) {
+  install(v: VueConstructor) {
     v.prototype.$evBus = eventBus;
   },
 };
