@@ -1,10 +1,9 @@
 // this is example of how unit test should look
 import Vue, { VueConstructor } from 'vue';
 import { createLocalVue } from '@vue/test-utils';
+import { Plugin as fragment } from 'vue-fragment';
 import TheHeader from './TheHeader.vue';
 import TheMenu from './TheMenu.vue';
-
-const factory = global.h.wrapperFactory(TheHeader);
 
 const eventBus = new Vue();
 
@@ -16,7 +15,11 @@ const prototypeHelpers = {
 };
 
 const localVue = createLocalVue();
+
 localVue.use(prototypeHelpers);
+localVue.use(fragment);
+
+const factory = global.h.wrapperFactory(TheHeader);
 
 describe('TheHeader', () => {
   let wrapper;

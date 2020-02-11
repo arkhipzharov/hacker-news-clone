@@ -5,7 +5,7 @@ export default Vue.extend({
     href: {
       type: [String, Number],
       required: false,
-      // if passed, user will not be redirected on any page, it handles not
+      // if passed, user will not be redirected to any page, it handles not
       // existing urls in loaded data
       default: undefined,
     },

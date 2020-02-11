@@ -1,5 +1,3 @@
-// in separate mixin to be available in template
-
 import Vue from 'vue';
 
 export default Vue.extend({

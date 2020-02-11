@@ -1,6 +1,9 @@
 <!-- eslint-disable prettier/prettier -->
 <template>
-  <div class="card">
+  <div
+    v-if="isExist"
+    class="card"
+  >
     <div
       v-if="isPassedContentToSlot('header')"
       class="card__header"
@@ -26,6 +29,11 @@
 
   export default Vue.extend({
     props: {
+      isExist: {
+        type: Boolean,
+        required: false,
+        default: true,
+      },
       isUnderlineExist: {
         type: Boolean,
         required: false,
@@ -42,10 +50,9 @@
             return (
               // check if not passed '' to slot
               vnode.text?.trim().length! > 0 ||
-              // check if passed html to slot
-              vnode.children?.length! > 0 ||
-              // check if passed component to slot
-              vnode.tag?.includes('vue-component-')
+              // check if passed html or component to slot
+              vnode.tag?.includes('vue-component-') ||
+              vnode.tag
             );
           }
           return false;

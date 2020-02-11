@@ -1,10 +1,11 @@
 <!-- eslint-disable prettier/prettier -->
 <template>
   <div class="wall-post">
-    <VCard class="wall-post__card">
+    <VCard class="wall-post__wall-post">
       <VImage
         class="wall-post__image"
         :href="data.url"
+        :alt="'wall post image'"
       />
       <a
         class="wall-post__title"
@@ -117,7 +118,7 @@
 
 <style lang="scss">
   .wall-post {
-    .wall-post__card {
+    .wall-post__wall-post {
       .card__body {
         font-size: 16px;
         line-height: 16px;

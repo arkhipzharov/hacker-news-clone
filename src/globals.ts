@@ -1,10 +1,12 @@
 import Vue from 'vue';
 import VueTruncate from 'vue-truncate-filter';
+import { Plugin as fragment } from 'vue-fragment';
 import moment from 'moment';
 import stripHtml from 'string-strip-html';
 import './reusable-global-components';
 
 Vue.use(VueTruncate);
+Vue.use(fragment);
 
 // using prototype to not import things every time
 // https://medium.com/@andrejsabrickis/https-medium-com-andrejsabrickis-create-simple-eventbus-to-communicate-between-vue-js-components-cdc11cd59860

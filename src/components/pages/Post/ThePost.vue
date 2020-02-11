@@ -2,7 +2,7 @@
 <template>
   <div class="post">
     <VCard
-      class="post__comment"
+      class="post__post"
       :isUnderlineExist="false"
     >
       <a
@@ -13,7 +13,10 @@
         {{ data.title || '...' }}
       </a>
       <span class="post__url">{{ data.url }}</span>
-      <VImage :href="data.url" />
+      <VImage
+        :href="data.url"
+        :alt="'post image'"
+      />
       <p
         v-if="data.text"
         class="post__text"
@@ -75,7 +78,10 @@
           {{ $stripHtml(data.text || '') }}
         </template>
       </VCard>
-      <TheInfiniteLoading :loadFun="loadCommentsTreeDataBranch" />
+      <TheInfiniteLoading
+        :loadFun="loadCommentsTreeDataBranch"
+        :noDataText="'comments'"
+      />
     </div>
   </div>
 </template>
@@ -97,11 +103,11 @@
   }
 
   interface Data {
-    dataResetDuringRoutingFix: undefined;
+    resetMixinNoDataOptionFix: undefined;
   }
 
   const data: Data = {
-    dataResetDuringRoutingFix: undefined,
+    resetMixinNoDataOptionFix: undefined,
   };
 
   interface DataToReset {
@@ -290,7 +296,7 @@
     margin-top: 40px;
     padding: 0 15px;
 
-    .post__comment {
+    .post__post {
       margin-bottom: 20px;
     }
 

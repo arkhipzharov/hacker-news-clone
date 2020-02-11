@@ -226,27 +226,40 @@ module.exports = {
       'error',
       2,
       {
-        /*
-          {{ `
-            ${data.score} ${
-            adoptWordEndingsToNumber(
-              data.score, ['point', 'points', 'points'])
-            }
-          ` }}
-
-          instead of
-
-          {{`
-            ${data.score} ${
+        ignores: [
+          /*
+            {{ `
+              ${data.score} ${
               adoptWordEndingsToNumber(
-                data.score, ['point', 'points', 'points']
-              )
-            }
-          `}}
+                data.score, ['point', 'points', 'points'])
+              }
+            ` }}
 
-          https://stackoverflow.com/a/53094449 - solution
-        */
-        ignores: ["TemplateLiteral > *"],
+            instead of
+
+            {{`
+              ${data.score} ${
+                adoptWordEndingsToNumber(
+                  data.score, ['point', 'points', 'points']
+                )
+              }
+            `}}
+
+            https://stackoverflow.com/a/53094449 - solution
+          */
+          "TemplateLiteral > *",
+          /*
+            <TheLoginOrRegisterPopup
+              v-if="
+                currPopup.name === 'TheLoginOrRegisterPopup' &&
+            --> currPopup.isExist === true
+              "
+            />
+
+            'Expected indentation of 12 spaces but found 10 spaces'
+          */
+          "VAttribute",
+        ],
       },
     ],
     'vue/html-self-closing': [

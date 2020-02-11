@@ -10,10 +10,12 @@ a {
   cursor: pointer;
   // break word if it's wider than container
   word-break: break-word;
+  box-sizing: border-box;
 }
 
 span {
   word-break: break-word;
+  box-sizing: border-box;
 }
 
 svg {
@@ -37,11 +39,13 @@ button {
   outline: none;
   cursor: pointer;
   display: block;
+  box-sizing: border-box;
 }
 
 p {
   margin: 0;
   word-break: break-word;
+  box-sizing: border-box;
 }
 
 input {
@@ -53,6 +57,8 @@ input {
   border: 0;
   outline: none;
   display: block;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 // Removes arrows from input[type='number']
@@ -76,6 +82,7 @@ textarea {
   resize: none;
   display: block;
   word-break: break-word;
+  box-sizing: border-box;
 }
 
 ul,
@@ -83,4 +90,5 @@ ol {
   margin: 0;
   padding: 0;
   list-style-position: inside;
+  box-sizing: border-box;
 }

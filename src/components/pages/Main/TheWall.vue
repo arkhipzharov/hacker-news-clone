@@ -7,7 +7,10 @@
       class="wall__post"
       :data="data"
     />
-    <TheInfiniteLoading :loadFun="loadPostsDataChunk" />
+    <TheInfiniteLoading
+      :loadFun="loadPostsDataChunk"
+      :noDataText="'posts'"
+    />
   </div>
 </template>
 <!-- eslint-enable -->

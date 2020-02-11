@@ -5,18 +5,9 @@
     his parent, but if ve extract menu from header we will need to use event bus
     to toggle menu from button in header, so it's most simple solution
   -->
-  <Fragment>
+  <fragment>
     <header class="header">
-      <router-link
-        to="/"
-        class="header__logo"
-      >
-        <span class="header__logo-icon">HN</span>
-        <div class="header__logo-text">
-          <span>Hacker</span>
-          <span>News</span>
-        </div>
-      </router-link>
+      <VLogo />
       <button
         class="header__toggle-menu-btn"
         @click="toggleMenu(false)"
@@ -28,28 +19,48 @@
       v-on-clickaway="() => toggleMenu(true)"
       :class="{ opened: isMenuOpened }"
     />
-  </Fragment>
+    <!--
+      cannot have nested <fragment> and cannot place popup inside menu
+      component because it's have 'transition' css prop other than 'none'
+      and popup have 'position: fixed', which breaks layout
+
+      https://stackoverflow.com/a/37953806
+    -->
+    <TheAuthPopup
+      :isExist="
+        currPopupData.name === 'TheAuthPopup' && currPopupData.isExist === true
+      "
+    />
+  </fragment>
 </template>
 <!-- eslint-enable -->
 
 <script lang="ts">
   import Vue from 'vue';
   import { mixin as clickaway } from 'vue-clickaway2';
-  import { Fragment } from 'vue-fragment';
   import TheMenu from '@/components/TheMenu';
+  import TheAuthPopup from './TheAuthPopup';
 
   interface Data {
+    currPopupData: {
+      name: string;
+      isExist: boolean;
+    };
     isMenuOpened: boolean;
   }
 
   const data: Data = {
+    currPopupData: {
+      name: '',
+      isExist: false,
+    },
     isMenuOpened: false,
   };
 
   export default Vue.extend({
     components: {
-      Fragment,
       TheMenu,
+      TheAuthPopup,
     },
     mixins: [clickaway],
     data() {
@@ -59,15 +70,21 @@
       $route: {
         immediate: true,
         handler() {
-          if (this.isMenuOpened) {
+          if (this.isMenuOpened && !this.currPopupData.isExist) {
             this.toggleMenu(false);
           }
         },
       },
     },
     mounted() {
-      this.$evBus.$on('close-menu-in-header-state', () => {
+      this.$evBus.$on('close-menu', () => {
         this.toggleMenu(false);
+      });
+      this.$evBus.$on('toggle-popup', (fullPopupCompNameCamelCase: string) => {
+        this.currPopupData = {
+          name: fullPopupCompNameCamelCase,
+          isExist: !this.currPopupData.isExist,
+        };
       });
     },
     methods: {
@@ -80,7 +97,7 @@
           for browser feedback with blue highlight after click
         */
         if (isClickaway) {
-          if (isMenuOpened) {
+          if (isMenuOpened && !this.currPopupData.isExist) {
             this.isMenuOpened = false;
           }
         } else {
@@ -96,7 +113,7 @@
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 9999;
+    z-index: 10000;
     display: flex;
     justify-content: space-between;
     width: 100%;
@@ -104,32 +121,6 @@
     height: 50px;
     background-color: $block-orange;
     box-shadow: rgba($shadow, 0.22) 0 3px 3px;
-
-    &__logo {
-      display: flex;
-      align-items: center;
-      height: 100%;
-      padding: 0 10px;
-    }
-
-    &__logo-icon {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 35px;
-      height: 35px;
-      margin-right: 10px;
-      color: $text-orange-pink;
-      background-color: $block-grey-dark;
-      border-radius: 50%;
-    }
-
-    &__logo-text {
-      > span {
-        color: $text-white;
-        font-size: 20px;
-      }
-    }
 
     &__toggle-menu-btn {
       display: flex;

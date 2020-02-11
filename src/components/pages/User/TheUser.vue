@@ -61,7 +61,10 @@
           {{ $stripHtml(data.text || '') | truncate(180) }}
         </template>
       </VCard>
-      <TheInfiniteLoading :loadFun="loadActionsDataChunk" />
+      <TheInfiniteLoading
+        :loadFun="loadActionsDataChunk"
+        :noDataTextsData="{ noMore: 'activities', no: 'activity' }"
+      />
     </div>
   </div>
 </template>

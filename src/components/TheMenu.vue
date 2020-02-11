@@ -31,7 +31,10 @@
       </a>
     </div>
     <div class="menu__item-wrapper">
-      <button class="menu__item">
+      <button
+        class="menu__item"
+        @click="toggleIsPopupExist('TheAuthPopup')"
+      >
         <span>Login</span>
         <VIcon :href="'chevron-right'" />
       </button>
@@ -62,10 +65,13 @@
       return data;
     },
     methods: {
+      toggleIsPopupExist(fullPopupCompNameCamelCase: string) {
+        this.$evBus.$emit('toggle-popup', fullPopupCompNameCamelCase);
+      },
       possiblyRedirectAndCloseMenu(name: string) {
         name = name.toLowerCase();
         if (this.$route.params.wallPostsType === name) {
-          this.$evBus.$emit('close-menu-in-header-state');
+          this.$evBus.$emit('close-menu');
         } else {
           this.$router.push(`/${name}`);
         }
@@ -79,7 +85,7 @@
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 10000;
+    z-index: 10001;
     width: 300px;
     height: 100%;
     background-color: $block-grey-dark;

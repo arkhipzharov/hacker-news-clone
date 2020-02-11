@@ -10,8 +10,8 @@
     :distance="300"
     @infinite="loadFun"
   >
-    <div slot="no-more">No more data</div>
-    <div slot="no-results">No data</div>
+    <div slot="no-more">No more {{ getNoDataText('noMore') }}</div>
+    <div slot="no-results">No {{ getNoDataText('no') }}</div>
   </InfiniteLoading>
 </template>
 <!-- eslint-enable -->
@@ -37,6 +37,18 @@
         type: Function,
         required: true,
       },
+      noDataText: {
+        type: String,
+        required: false,
+        default: 'data',
+      },
+      noDataTextsData: {
+        type: Object,
+        required: false,
+        default() {
+          return {};
+        },
+      },
     },
     data() {
       return data;
@@ -52,6 +64,13 @@
       });
     },
     methods: {
+      getNoDataText(noDataTextsDataKey: string) {
+        let noDataText = this.noDataText;
+        if (noDataText === 'data') {
+          noDataText = this.noDataTextsData[noDataTextsDataKey];
+        }
+        return noDataText;
+      },
       reRenderComponent() {
         this.isComponentReRendered = !this.isComponentReRendered;
       },

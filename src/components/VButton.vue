@@ -1,8 +1,8 @@
 <!-- eslint-disable prettier/prettier -->
 <template>
-  <a
+  <button
     class="button"
-    @click.prevent="optionalHref"
+    @click="optionalHref"
   >
     <div class="button__content">
       <span>
@@ -10,7 +10,7 @@
       </span>
       <VIcon :href="'arrow-right-long'" />
     </div>
-  </a>
+  </button>
 </template>
 <!-- eslint-enable -->
 
@@ -32,6 +32,14 @@
     border-radius: 2px;
     box-shadow: rgba($shadow, 0.14) 0 2px 2px 0,
       rgba($shadow, 0.2) 0 3px 1px -2px, rgba($shadow, 0.12) 0 1px 5px 0;
+    opacity: 1;
+    transition: opacity 0.3s;
+
+    &--disabled {
+      cursor: not-allowed;
+      opacity: 0.65;
+      transition: opacity 0.3s;
+    }
 
     &__content {
       position: relative;

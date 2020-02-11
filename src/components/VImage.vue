@@ -6,7 +6,7 @@
   >
     <img
       src="@/assets/img/decorations/posts/sky.jpg"
-      alt="post image"
+      :alt="alt"
     >
   </a>
 </template>
@@ -16,7 +16,14 @@
   import mixins from 'vue-typed-mixins';
   import optionalHref from '@/mixins/optional-href';
 
-  export default mixins(optionalHref).extend({});
+  export default mixins(optionalHref).extend({
+    props: {
+      alt: {
+        type: String,
+        required: true,
+      },
+    },
+  });
 </script>
 
 <style lang="scss">
