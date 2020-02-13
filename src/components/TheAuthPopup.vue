@@ -1,18 +1,15 @@
 <!-- eslint-disable prettier/prettier -->
 <template>
-  <VPopup :isExist="isExist">
+  <VPopup
+    :isExist="isExist"
+    class="auth"
+  >
     <template v-slot:header>
       <div class="auth__header">
         <div class="auth__header-top">
           <VLogo
             @click.native="closePopup(); closeMenu();"
           />
-          <button
-            class="auth__header-close-btn"
-            @click="closePopup"
-          >
-            <VIcon :href="'cross'" />
-          </button>
         </div>
         <div class="auth__header-tabs">
           <button
@@ -34,9 +31,9 @@
       </div>
     </template>
     <template v-slot:default>
-      <transition
-        name="fade-tab-content"
+      <VTransition
         mode="out-in"
+        :duration="250"
       >
         <div
           v-if="tabNum === 0"
@@ -132,7 +129,7 @@
             SIGN UP
           </VButton>
         </div>
-      </transition>
+      </VTransition>
     </template>
   </VPopup>
 </template>
@@ -205,24 +202,6 @@
       padding: 16px 0;
     }
 
-    &__header-close-btn {
-      position: absolute;
-      top: 50%;
-      right: 17px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 30px;
-      height: 30px;
-      transform: translateY(-50%);
-
-      > svg {
-        width: 10px;
-        height: 10px;
-        fill: $text-white;
-      }
-    }
-
     &__header-tabs {
       position: relative;
       display: flex;
@@ -240,7 +219,7 @@
         height: 10px;
         padding: 2px;
         transform: rotate(0);
-        transition: transform 0.4s, fill 0.4s;
+        transition: transform 0.5s, fill 0.5s;
         will-change: transform;
         fill: $text-grey-x-light;
       }
@@ -252,7 +231,7 @@
 
       @at-root .auth__header-tab.active > svg {
         transform: rotate(360deg);
-        transition: transform 0.4s, fill 0.4s;
+        transition: transform 0.5s, fill 0.5s;
         will-change: transform;
         fill: $text-white;
       }
@@ -261,12 +240,12 @@
         margin-left: 8px;
         color: $text-grey-x-light;
         font-size: 15px;
-        transition: color 0.3s;
+        transition: color 0.25s;
       }
 
       @at-root .auth__header-tab.active > span {
         color: $text-white;
-        transition: color 0.3s;
+        transition: color 0.25s;
       }
     }
 
@@ -279,12 +258,12 @@
       height: 3px;
       background-color: $block-grey-dark;
       transform: translateX(0%);
-      transition: transform 0.3s;
+      transition: transform 0.25s;
       will-change: transform;
 
       @at-root .auth__header-tab:nth-child(2).active ~ & {
         transform: translateX(100%);
-        transition: transform 0.3s;
+        transition: transform 0.25s;
         will-change: transform;
       }
     }

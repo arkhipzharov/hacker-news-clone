@@ -56,28 +56,33 @@
     </VCard>
     <span class="post__comments-title">Comments</span>
     <div class="post__comments">
-      <VCard
-        v-for="(data, index) in commentsTreeData"
-        :key="index"
-        :style="{ 'margin-left': `${data.nestingLevel * 20}px` }"
-        class="post__comment"
+      <VTransition
+        :name="'zoom'"
+        isGroup
       >
-        <template v-slot:header>
-          <div
-            v-if="data.by"
-            class="post__comment-header"
-          >
-            By <router-link
-              :to="`/user/${data.by}`"
+        <VCard
+          v-for="data in commentsTreeData"
+          :key="data.id"
+          :style="{ 'margin-left': `${data.nestingLevel * 20}px` }"
+          class="post__comment"
+        >
+          <template v-slot:header>
+            <div
+              v-if="data.by"
+              class="post__comment-header"
             >
-              {{ data.by }}
-            </router-link>
-          </div>
-        </template>
-        <template v-slot:default>
-          {{ $stripHtml(data.text || '') }}
-        </template>
-      </VCard>
+              By <router-link
+                :to="`/user/${data.by}`"
+              >
+                {{ data.by }}
+              </router-link>
+            </div>
+          </template>
+          <template v-slot:default>
+            {{ $stripHtml(data.text || '') }}
+          </template>
+        </VCard>
+      </VTransition>
       <TheInfiniteLoading
         :loadFun="loadCommentsTreeDataBranch"
         :noDataText="'comments'"
@@ -177,7 +182,6 @@
             const userData: UserData = await request(
               `user/${postData.by}.json`,
             );
-            this.data = postData;
             this.userKarma = userData.karma;
           } else if (
             this.isReEnteredPage &&
@@ -195,15 +199,18 @@
               }) + 1,
             );
             postData.kids = rootCommentDataIds;
-            this.data = postData;
           }
-          if (postData.kids) {
+          this.data = postData;
+          if (postData.kids?.length! > 0) {
             await this.loadCommentsTreeDataBranchItemsRecursive(
               $state,
               postData,
             );
             this.commentNestingLevelAsyncCallStackFixCount = 0;
           } else {
+            if (commentsTreeData.length > 0) {
+              $state.loaded();
+            }
             $state.complete();
           }
           this.isLoadingComments = false;
@@ -293,6 +300,7 @@
 
 <style lang="scss">
   .post {
+    flex: 1 1 0;
     margin-top: 40px;
     padding: 0 15px;
 

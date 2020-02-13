@@ -34,7 +34,7 @@ describe('TheHeader', () => {
       },
     });
 
-    wrapper.find('.header__toggle-menu-btn').trigger('click');
+    wrapper.find('.header__toggle-menu-button').trigger('click');
 
     expect(toggleMenu).toHaveBeenCalled();
   });
@@ -79,7 +79,7 @@ describe('TheHeader', () => {
       },
     });
 
-    wrapper.find('.header__toggle-menu-btn').trigger('click');
+    wrapper.find('.header__toggle-menu-button').trigger('click');
 
     expect(onClickaway).toHaveBeenCalled();
   });
@@ -90,7 +90,7 @@ describe('TheHeader', () => {
       stubs: ['router-link'],
     });
 
-    wrapper.find('.header__toggle-menu-btn').trigger('click');
+    wrapper.find('.header__toggle-menu-button').trigger('click');
     await Vue.nextTick();
 
     expect(wrapper.find(TheMenu).classes('opened')).toBe(true);
@@ -106,7 +106,7 @@ describe('TheHeader', () => {
     // startup and test breaks
     await Vue.nextTick();
     wrapper.setData({ isMenuOpened: true });
-    wrapper.find('.header__toggle-menu-btn').trigger('click');
+    wrapper.find('.header__toggle-menu-button').trigger('click');
     await Vue.nextTick();
 
     expect(wrapper.find(TheMenu).classes('opened')).toBe(false);

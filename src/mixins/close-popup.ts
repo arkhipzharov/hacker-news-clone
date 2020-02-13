@@ -1,12 +1,16 @@
-// should be used along with reset mixin
+// should be used along with reset mixin and reusable popup component
 
 import Vue from 'vue';
 
 export default Vue.extend({
-  methods: {
-    closePopup(this: any) {
-      this.$evBus.$emit('close-popup');
+  mounted(this: any) {
+    this.$evBus.$on('popup-closed', () => {
       this.reset();
+    });
+  },
+  methods: {
+    closePopup() {
+      this.$evBus.$emit('close-popup');
     },
   },
 });

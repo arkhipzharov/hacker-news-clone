@@ -9,7 +9,7 @@
     <header class="header">
       <VLogo />
       <button
-        class="header__toggle-menu-btn"
+        class="header__toggle-menu-button"
         @click="toggleMenu(false)"
       >
         <VIcon :href="'menu'" />
@@ -31,6 +31,11 @@
         currPopupData.name === 'TheAuthPopup' && currPopupData.isExist === true
       "
     />
+    <TheAboutPopup
+      :isExist="
+        currPopupData.name === 'TheAboutPopup' && currPopupData.isExist === true
+      "
+    />
   </fragment>
 </template>
 <!-- eslint-enable -->
@@ -40,6 +45,7 @@
   import { mixin as clickaway } from 'vue-clickaway2';
   import TheMenu from '@/components/TheMenu';
   import TheAuthPopup from './TheAuthPopup';
+  import TheAboutPopup from './TheAboutPopup';
 
   interface Data {
     currPopupData: {
@@ -61,6 +67,7 @@
     components: {
       TheMenu,
       TheAuthPopup,
+      TheAboutPopup,
     },
     mixins: [clickaway],
     data() {
@@ -122,7 +129,7 @@
     background-color: $block-orange;
     box-shadow: rgba($shadow, 0.22) 0 3px 3px;
 
-    &__toggle-menu-btn {
+    &__toggle-menu-button {
       display: flex;
       align-items: center;
       justify-content: center;

@@ -12,7 +12,7 @@
           class="menu__header-search-input"
           placeholder="Search..."
         >
-        <button class="menu__header-search-btn">
+        <button class="menu__header-search-button">
           <VIcon :href="'search'" />
         </button>
       </div>
@@ -40,7 +40,10 @@
       </button>
     </div>
     <div class="menu__item-wrapper">
-      <button class="menu__item">
+      <button
+        class="menu__item"
+        @click="toggleIsPopupExist('TheAboutPopup')"
+      >
         <span>About</span>
         <VIcon :href="'chevron-right'" />
       </button>
@@ -133,7 +136,7 @@
       }
     }
 
-    &__header-search-btn {
+    &__header-search-button {
       display: flex;
       align-items: center;
       justify-content: center;

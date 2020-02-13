@@ -96,6 +96,7 @@
     },
     methods: {
       // ru and en
+      //
       // https://realadmin.ru/coding/sklonenie-na-javascript.html (ru)
       adoptWordEndingsToNumber(number: any, wordsWithAllEndings: string[]) {
         number = Math.abs(number) % 100;
@@ -130,7 +131,6 @@
     }
 
     &__title {
-      display: block;
       margin-bottom: 20px;
       color: $text-orange-pink;
       font-size: 24px;

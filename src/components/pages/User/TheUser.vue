@@ -31,36 +31,41 @@
         </template>
       </VCard>
       <span class="user__actions-title">Recent Activity</span>
-      <VCard
-        v-for="(data, index) in actionsData"
-        :key="index"
-        :class="[
-          'user__action', { 'card--submitted': data.type !== 'comment' }
-        ]"
+      <VTransition
+        isGroup
+        :name="'zoom'"
       >
-        <template v-slot:header>
-          <router-link
-            class="user__action-header"
-            :to="
-              `/post/${
-                (data.type !== 'comment' && data.id) || data.parentPostId
-              }`
-            "
-          >
-            {{
-              `
-                ${data.type === 'comment' ? 'Commented: ' : 'Submitted: '}
-                "${
-                data.type === 'comment' ? data.parentPostTitle : data.title
-              }"
-              `
-            }}
-          </router-link>
-        </template>
-        <template v-slot:default>
-          {{ $stripHtml(data.text || '') | truncate(180) }}
-        </template>
-      </VCard>
+        <VCard
+          v-for="data in actionsData"
+          :key="data.id"
+          :class="[
+            'user__action', { 'card--submitted': data.type !== 'comment' }
+          ]"
+        >
+          <template v-slot:header>
+            <router-link
+              class="user__action-header"
+              :to="
+                `/post/${
+                  (data.type !== 'comment' && data.id) || data.parentPostId
+                }`
+              "
+            >
+              {{
+                `
+                  ${data.type === 'comment' ? 'Commented: ' : 'Submitted: '}
+                  "${
+                  data.type === 'comment' ? data.parentPostTitle : data.title
+                }"
+                `
+              }}
+            </router-link>
+          </template>
+          <template v-slot:default>
+            {{ $stripHtml(data.text || '') | truncate(180) }}
+          </template>
+        </VCard>
+      </VTransition>
       <TheInfiniteLoading
         :loadFun="loadActionsDataChunk"
         :noDataTextsData="{ noMore: 'activities', no: 'activity' }"
@@ -98,6 +103,7 @@
   interface DataToReset {
     user: UserData;
     actionsData: ItemData[];
+    actionDataIds: number[];
     actionDataIdsChunked: number[][];
     loadedActionsDataChunksCount: number;
     isReEnteredPage: boolean;
@@ -107,6 +113,7 @@
   const dataToReset: DataToReset = {
     user: {} as UserData,
     actionsData: [],
+    actionDataIds: [],
     actionDataIdsChunked: [],
     loadedActionsDataChunksCount: 0,
     isReEnteredPage: false,
@@ -126,6 +133,9 @@
       return data;
     },
     mounted() {
+      if (this.loadedActionsDataChunksCount > 0) {
+        this.loadedActionsDataChunksCount = 0;
+      }
       const username = this.user?.id;
       if (username) {
         this.isReEnteredPage = true;
@@ -137,40 +147,46 @@
     },
     methods: {
       async loadActionsDataChunk($state: StateParam) {
-        let actionDataIdsChunked = this.actionDataIdsChunked;
-        if (actionDataIdsChunked.length === 0) {
-          const actionDataIdsChunkSize = this.actionDataIdsChunkSize;
+        const actionsData = this.actionsData;
+        let actionDataIds = this.actionDataIds;
+        if (!this.user?.id) {
           const username = this.$route.params.username;
           const userData: UserData = await request(`user/${username}.json`);
           this.user = userData;
-          let actionDataIds = userData.submitted;
-          const actionsData = this.actionsData;
-          if (this.isReEnteredPage && actionsData.length > 0) {
-            actionDataIds = actionDataIds.slice(
-              actionDataIds.findIndex((id) => {
-                return id === actionsData[actionsData.length - 1].id;
-              }) + 1,
-            );
-          }
-          actionDataIdsChunked = actionDataIds.reduce(
-            (ids: number[][], _id: number, i: number) => {
-              const actionDataIdsChunk = actionDataIds.slice(
-                i * actionDataIdsChunkSize,
-                (i + 1) * actionDataIdsChunkSize,
-              );
-              if (actionDataIdsChunk.length > 0) {
-                ids.push(actionDataIdsChunk);
-              }
-              return ids;
-            },
-            [],
+          actionDataIds = userData.submitted;
+        } else if (
+          this.isReEnteredPage &&
+          actionsData.length > 0 &&
+          actionDataIds.length > 0
+        ) {
+          actionDataIds = actionDataIds.slice(
+            actionDataIds.findIndex((id) => {
+              return id === actionsData[actionsData.length - 1].id;
+            }) + 1,
           );
-          if (actionDataIdsChunked.length === 0) {
-            $state.complete();
-            return;
-          }
-          this.actionDataIdsChunked = actionDataIdsChunked;
         }
+        this.actionDataIds = actionDataIds;
+        if (actionDataIds.length === 0) {
+          if (actionsData.length > 0) {
+            $state.loaded();
+          }
+          $state.complete();
+          return;
+        }
+        const actionDataIdsChunkSize = this.actionDataIdsChunkSize;
+        const actionDataIdsChunked = actionDataIds.reduce(
+          (ids: number[][], _id: number, i: number) => {
+            const actionDataIdsChunk = actionDataIds.slice(
+              i * actionDataIdsChunkSize,
+              (i + 1) * actionDataIdsChunkSize,
+            );
+            if (actionDataIdsChunk.length > 0) {
+              ids.push(actionDataIdsChunk);
+            }
+            return ids;
+          },
+          [],
+        );
         const loadedActionsDataChunksCount = this.loadedActionsDataChunksCount;
         let actionsDataChunk: (
           | CommentData
@@ -179,7 +195,9 @@
           | undefined
         )[] = [];
         actionsDataChunk = await Promise.all(
-          actionDataIdsChunked[loadedActionsDataChunksCount].map((id) => {
+          actionDataIdsChunked[
+            actionDataIdsChunked.length > 1 ? loadedActionsDataChunksCount : 0
+          ].map((id) => {
             return this.fetchActionData(id);
           }),
         );
@@ -196,6 +214,7 @@
         ) {
           this.loadedActionsDataChunksCount++;
           await this.loadActionsDataChunk($state);
+          return;
         }
         if (loadedActionsDataChunksCount < actionDataIdsChunked.length - 1) {
           this.loadedActionsDataChunksCount++;
@@ -242,6 +261,8 @@
 
 <style lang="scss">
   .user {
+    flex: 1 1 0;
+
     &__account-info {
       display: flex;
       flex-direction: column;
@@ -320,7 +341,7 @@
     .user__action {
       margin-bottom: 40px;
 
-      &:nth-last-child(2) {
+      &:last-child {
         margin-bottom: 0;
       }
     }

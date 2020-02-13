@@ -1,12 +1,18 @@
 <!-- eslint-disable prettier/prettier -->
 <template>
   <div class="wall">
-    <RptWallPost
-      v-for="(data, index) in postsData"
-      :key="index"
-      class="wall__post"
-      :data="data"
-    />
+    <VTransition
+      isGroup
+      :name="'zoom'"
+      :duration="600"
+    >
+      <RptWallPost
+        v-for="data in postsData"
+        :key="data.id"
+        class="wall__post"
+        :data="data"
+      />
+    </VTransition>
     <TheInfiniteLoading
       :loadFun="loadPostsDataChunk"
       :noDataText="'posts'"
@@ -36,6 +42,7 @@
 
   interface DataToReset {
     postsData: ItemData[];
+    postDataIds: number[];
     postDataIdsChunked: number[][];
     wallPostsType: string;
     loadedPostsDataChunksCount: number;
@@ -44,6 +51,7 @@
 
   const dataToReset: DataToReset = {
     postsData: [],
+    postDataIds: [],
     postDataIdsChunked: [],
     wallPostsType: '',
     loadedPostsDataChunksCount: 0,
@@ -73,43 +81,53 @@
     },
     methods: {
       async loadPostsDataChunk($state: StateParam) {
-        let postDataIdsChunked = this.postDataIdsChunked;
-        if (postDataIdsChunked.length === 0) {
+        const postsData = this.postsData;
+        let postDataIds = this.postDataIds;
+        if (!this.wallPostsType) {
           const wallPostsType = this.$route.params.wallPostsType;
-          let postDataIds = await request(`${wallPostsType}stories.json`);
-          const postsData = this.postsData;
-          if (this.isReEnteredPage && postsData.length > 0) {
-            postDataIds = postDataIds.slice(
-              postDataIds.findIndex((id: number) => {
-                return id === postsData[postsData.length - 1].id;
-              }) + 1,
-            );
-          }
           this.wallPostsType = wallPostsType;
-          const postDataIdsChunkSize = this.postDataIdsChunkSize;
-          postDataIdsChunked = postDataIds.reduce(
-            (ids: number[][], _id: number, i: number) => {
-              const postDataIdsChunk = postDataIds.slice(
-                i * postDataIdsChunkSize,
-                (i + 1) * postDataIdsChunkSize,
-              );
-              if (postDataIdsChunk.length > 0) {
-                ids.push(postDataIdsChunk);
-              }
-              return ids;
-            },
-            [],
+          postDataIds = await request(`${wallPostsType}stories.json`);
+        } else if (
+          this.isReEnteredPage &&
+          postsData.length > 0 &&
+          postDataIds.length > 0
+        ) {
+          postDataIds = postDataIds.slice(
+            postDataIds.findIndex((id: number) => {
+              return id === postsData[postsData.length - 1].id;
+            }) + 1,
           );
-          if (postDataIdsChunked.length === 0) {
-            $state.complete();
-            return;
-          }
-          this.postDataIdsChunked = postDataIdsChunked;
         }
+        this.postDataIds = postDataIds;
+        if (postDataIds.length === 0) {
+          if (postsData.length > 0) {
+            $state.loaded();
+          }
+          $state.complete();
+          return;
+        }
+        const postDataIdsChunkSize = this.postDataIdsChunkSize;
+        let postDataIdsChunked = this.postDataIdsChunked;
+        postDataIdsChunked = postDataIds.reduce(
+          (ids: number[][], _id: number, i: number) => {
+            const postDataIdsChunk = postDataIds.slice(
+              i * postDataIdsChunkSize,
+              (i + 1) * postDataIdsChunkSize,
+            );
+            if (postDataIdsChunk.length > 0) {
+              ids.push(postDataIdsChunk);
+            }
+            return ids;
+          },
+          [],
+        );
+        this.postDataIdsChunked = postDataIdsChunked;
         const loadedPostsDataChunksCount = this.loadedPostsDataChunksCount;
         let postsDataChunk: (ItemData | null)[] = [];
         postsDataChunk = await Promise.all(
-          postDataIdsChunked[loadedPostsDataChunksCount].map((id) => {
+          postDataIdsChunked[
+            postDataIdsChunked.length > 1 ? loadedPostsDataChunksCount : 0
+          ].map((id) => {
             return request(`item/${id}.json`);
           }),
         );
@@ -121,6 +139,7 @@
         } else if (loadedPostsDataChunksCount < postDataIdsChunked.length - 1) {
           this.loadedPostsDataChunksCount++;
           await this.loadPostsDataChunk($state);
+          return;
         }
         if (loadedPostsDataChunksCount < postDataIdsChunked.length - 1) {
           this.loadedPostsDataChunksCount++;
@@ -142,13 +161,14 @@
 
 <style lang="scss">
   .wall {
+    height: (calc(100% - 39px));
     margin-top: 40px;
     padding: 0 15px;
 
-    > .wall__post {
+    .wall__post {
       margin-bottom: 40px;
 
-      &:nth-last-child(2) {
+      &:last-child {
         margin-bottom: 0;
       }
     }

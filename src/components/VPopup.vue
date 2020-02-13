@@ -1,25 +1,31 @@
+<!-- based on: https://tahazsh.com/nested-transitions-in-vue -->
 <!-- eslint-disable prettier/prettier -->
 <template>
   <div>
-    <transition
-      name="fade-backdrop"
-      @after-enter="toggleIsPopupContentExist(true)"
-    >
+    <VTransition @after-enter="toggleIsPopupContentExist(true)">
       <div
         v-if="isExist"
         class="popup__backdrop"
         @click="toggleIsPopupContentExist(false)"
       >
         <div class="popup__backdrop-inner">
-          <transition
-            name="zoom"
+          <VTransition
+            :name="'zoom'"
             @after-leave="close"
           >
             <div
               v-if="isPopupContentExist"
               class="popup"
             >
+              <button
+                class="popup__close-button"
+                @click="toggleIsPopupContentExist(false)"
+              >
+                <VIcon :href="'cross'" />
+              </button>
+              <button class="popup__close-button"></button>
               <VCard
+                :isUnderlineExist="isUnderlineExist"
                 class="popup__popup"
                 @click.native.stop
               >
@@ -33,39 +39,35 @@
                 </template>
               </VCard>
             </div>
-          </transition>
+          </VTransition>
         </div>
       </div>
-    </transition>
+    </VTransition>
   </div>
 </template>
 <!-- eslint-enable -->
 
 <script lang="ts">
-  import mixins from 'vue-typed-mixins';
-  import resetFactory from '@/mixins/reset-factory';
+  import Vue from 'vue';
 
   interface Data {
-    resetMixinNoDataOptionFix: undefined;
-  }
-
-  const data: Data = {
-    resetMixinNoDataOptionFix: undefined,
-  };
-
-  interface DataToReset {
     isPopupContentExist: boolean;
   }
 
-  const dataToReset: DataToReset = {
+  const data: Data = {
     isPopupContentExist: false,
   };
 
-  export default mixins(resetFactory<DataToReset>(dataToReset)).extend({
+  export default Vue.extend({
     props: {
       isExist: {
         type: Boolean,
         required: true,
+      },
+      isUnderlineExist: {
+        type: Boolean,
+        required: false,
+        default: true,
       },
     },
     data() {
@@ -82,7 +84,8 @@
       },
       close() {
         this.$evBus.$emit('toggle-popup', 'TheAuthPopup');
-        this.reset();
+        this.isPopupContentExist = false;
+        this.$evBus.$emit('popup-closed');
       },
     },
   });
@@ -90,6 +93,7 @@
 
 <style lang="scss">
   .popup {
+    position: relative;
     width: 100%;
 
     &__backdrop {
@@ -109,55 +113,28 @@
       padding: 0 20px;
     }
 
+    &__close-button {
+      position: absolute;
+      top: 17px;
+      right: 17px;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+
+      > svg {
+        width: 10px;
+        height: 10px;
+        fill: $text-white;
+      }
+    }
+
     .popup__popup {
       .card__body {
         padding: 24px;
       }
-    }
-  }
-
-  .fade-backdrop-enter,
-  .fade-backdrop-leave-to {
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-
-  .fade-backdrop-enter-to,
-  .fade-backdrop-leave {
-    opacity: 1;
-    transition: opacity 0.3s;
-  }
-
-  .zoom-enter-active,
-  .zoom-leave-active {
-    animation-name: zoom;
-    animation-duration: 0.2s;
-    animation-fill-mode: both;
-  }
-
-  .zoom-leave-active {
-    animation-direction: reverse;
-  }
-
-  .fade-tab-content-enter,
-  .fade-tab-content-leave-to {
-    opacity: 0;
-    transition: opacity 0.2s;
-  }
-
-  .fade-tab-content-enter-to,
-  .fade-tab-content-leave {
-    opacity: 1;
-    transition: opacity 0.2s;
-  }
-
-  @keyframes zoom {
-    from {
-      transform: scale3d(0.3, 0.3, 0.3);
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
     }
   }
 </style>
