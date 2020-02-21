@@ -51,13 +51,16 @@
       }
     }
 
+    .card__header {
+      background-color: $bg-grey-dark;
+    }
+
     &__header {
       display: block;
       padding: 30px 24px 0;
       color: $text-orange-pink;
       font-size: 24px;
       line-height: 26px;
-      background-color: $block-grey-dark;
     }
 
     &__text {

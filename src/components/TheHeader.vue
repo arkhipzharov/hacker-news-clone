@@ -126,7 +126,7 @@
     width: 100%;
     min-width: 320px;
     height: 50px;
-    background-color: $block-orange;
+    background-color: $bg-orange;
     box-shadow: rgba($shadow, 0.22) 0 3px 3px;
 
     &__toggle-menu-button {

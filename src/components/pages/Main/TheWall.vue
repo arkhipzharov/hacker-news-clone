@@ -6,7 +6,7 @@
       :name="'zoom'"
       :duration="600"
     >
-      <RptWallPost
+      <VWallPost
         v-for="data in postsData"
         :key="data.id"
         class="wall__post"
@@ -30,7 +30,7 @@
   import ItemData from '@/ts/interfaces/api-data';
   import StateParam from '@/ts/interfaces/infinite-loading';
   import TheInfiniteLoading from '@/components/TheInfiniteLoading';
-  import RptWallPost from './RptWallPost';
+  import VWallPost from './VWallPost';
 
   interface Data {
     postDataIdsChunkSize: number;
@@ -63,7 +63,7 @@
     resetDynamicRoute,
   ).extend({
     components: {
-      RptWallPost,
+      VWallPost,
       TheInfiniteLoading,
     },
     data() {

@@ -56,33 +56,7 @@
     </VCard>
     <span class="post__comments-title">Comments</span>
     <div class="post__comments">
-      <VTransition
-        :name="'zoom'"
-        isGroup
-      >
-        <VCard
-          v-for="data in commentsTreeData"
-          :key="data.id"
-          :style="{ 'margin-left': `${data.nestingLevel * 20}px` }"
-          class="post__comment"
-        >
-          <template v-slot:header>
-            <div
-              v-if="data.by"
-              class="post__comment-header"
-            >
-              By <router-link
-                :to="`/user/${data.by}`"
-              >
-                {{ data.by }}
-              </router-link>
-            </div>
-          </template>
-          <template v-slot:default>
-            {{ $stripHtml(data.text || '') }}
-          </template>
-        </VCard>
-      </VTransition>
+      <TheComments :children="commentsTreeData" />
       <TheInfiniteLoading
         :loadFun="loadCommentsTreeDataBranch"
         :noDataText="'comments'"
@@ -102,9 +76,13 @@
   import StateParam from '@/ts/interfaces/infinite-loading';
   import isItemDataValid from '@/ts/helpers/is-item-data-valid';
   import TheInfiniteLoading from '@/components/TheInfiniteLoading';
+  import TheComments from './TheComments';
 
   interface CommentData extends ItemData {
     nestingLevel: number;
+    children: CommentData[];
+    // hardcoding index signature because interface cannot extend two interfaces
+    [key: string]: any;
   }
 
   interface Data {
@@ -117,7 +95,7 @@
 
   interface DataToReset {
     commentsTreeData: CommentData[];
-    currentCommentsTreeDataBranch: CommentData[];
+    currentCommentsTreeDataBranchFlat: CommentData[];
     data: ItemData;
     userKarma: number;
     isReEnteredPage: boolean;
@@ -128,7 +106,7 @@
 
   const dataToReset: DataToReset = {
     commentsTreeData: [],
-    currentCommentsTreeDataBranch: [],
+    currentCommentsTreeDataBranchFlat: [],
     data: {} as ItemData,
     userKarma: 0,
     isReEnteredPage: false,
@@ -147,13 +125,14 @@
     },
     components: {
       TheInfiniteLoading,
+      TheComments,
     },
     async mounted() {
       if (this.isLeftPage) {
         // reset data for use in async functions execution to avoid errors
         this.isLeftPage = false;
         this.isLoadingComments = false;
-        this.currentCommentsTreeDataBranch = [];
+        this.currentCommentsTreeDataBranchFlat = [];
         this.commentNestingLevelAsyncCallStackFixCount = 0;
       }
       const postId = this.data?.id?.toString();
@@ -241,7 +220,7 @@
                 commentNestingLevelAsyncCallStackFixCount = 8;
               }
               kidCommentData.nestingLevel = commentNestingLevelAsyncCallStackFixCount;
-              this.currentCommentsTreeDataBranch.push(kidCommentData);
+              this.currentCommentsTreeDataBranchFlat.push(kidCommentData);
               // with async functions call stack must be empty before start,
               // and we can't get function stack trace in not deprecated
               // and efficient way
@@ -276,8 +255,9 @@
           (id) => id === commentData.id,
         );
         if (currentRootCommentDataInd !== -1) {
-          const currentCommentsTreeDataBranch = this
-            .currentCommentsTreeDataBranch;
+          const currentCommentsTreeDataBranch = this.convertFlatCommentsDataArrayToTree(
+            this.currentCommentsTreeDataBranchFlat,
+          );
           if (currentRootCommentDataInd < rootCommentDataIds.length - 1) {
             this.commentsTreeData.push(...currentCommentsTreeDataBranch);
             $state.loaded();
@@ -291,8 +271,29 @@
             }
             $state.complete();
           }
-          this.currentCommentsTreeDataBranch = [];
+          this.currentCommentsTreeDataBranchFlat = [];
         }
+      },
+      // https://stackoverflow.com/questions/18017869/build-tree-array-from-flat-array-in-javascript
+      convertFlatCommentsDataArrayToTree(flatCommentsData: CommentData[]) {
+        const map = {} as CommentData;
+        const rootCommentsData: CommentData[] = [];
+        let commentData = {} as CommentData;
+        for (let i = 0; i < flatCommentsData.length; i += 1) {
+          map[flatCommentsData[i].id] = i;
+          flatCommentsData[i].children = [];
+        }
+        for (let i = 0; i < flatCommentsData.length; i += 1) {
+          commentData = flatCommentsData[i];
+          if (commentData.parent !== this.data.id) {
+            flatCommentsData[map[commentData.parent!]].children.push(
+              commentData,
+            );
+          } else {
+            rootCommentsData.push(commentData);
+          }
+        }
+        return rootCommentsData;
       },
     },
   });
@@ -334,6 +335,10 @@
 
     .post__by {
       margin-bottom: 50px;
+
+      .card__header {
+        background-color: $bg-blue;
+      }
     }
 
     &__by-header {
@@ -341,7 +346,6 @@
       flex-direction: column;
       align-items: center;
       height: 214px;
-      background-color: $block-blue;
     }
 
     &__by-username {
@@ -383,24 +387,6 @@
     &__comments {
       display: flex;
       flex-direction: column;
-    }
-
-    .post__comment {
-      margin-bottom: 20px;
-
-      &:last-child {
-        margin-bottom: 40px;
-      }
-    }
-
-    &__comment-header {
-      padding: 15px 20px;
-      line-height: 19.2px;
-      background-color: $block-grey;
-
-      > a {
-        color: $text-orange-pink;
-      }
     }
   }
 </style>

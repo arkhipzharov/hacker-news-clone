@@ -64,22 +64,21 @@
 
 <style lang="scss">
   .card {
-    position: relative;
-    overflow: hidden;
-    background-color: $block-grey-dark;
+    background-color: $bg-grey-dark;
     border-radius: 3px;
     box-shadow: rgba($shadow, 0.14) 0 2px 2px 0,
       rgba($shadow, 0.2) 0 3px 1px -2px, rgba($shadow, 0.12) 0 1px 5px 0;
 
     &__header {
-      background-color: $block-orange;
+      background-color: $bg-orange;
+      border-radius: 3px 3px 0 0;
 
       @at-root .card--submitted > & {
-        background-color: $block-purple;
+        background-color: $bg-purple;
       }
 
       @at-root .card--post-by > & {
-        background-color: $block-blue;
+        background-color: $bg-blue;
       }
     }
 
@@ -90,15 +89,13 @@
     }
 
     &__underline-decorator {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
+      display: block;
       height: 3px;
-      background-color: $block-orange;
+      background-color: $bg-orange;
+      border-radius: 0 0 3px 3px;
 
       @at-root .card--submitted > & {
-        background-color: $block-purple;
+        background-color: $bg-purple;
       }
     }
   }

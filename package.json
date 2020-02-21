@@ -88,6 +88,7 @@
     "babel-core": "^7.0.0-bridge.0",
     "core-js": "^3.6.4",
     "moment": "^2.24.0",
+    "normalize.css": "^8.0.1",
     "regenerator-runtime": "^0.13.3",
     "vue": "^2.6.11",
     "vue-clickaway2": "^2.3.1",

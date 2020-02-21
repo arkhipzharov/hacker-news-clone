@@ -4,6 +4,10 @@ import { Plugin as fragment } from 'vue-fragment';
 import moment from 'moment';
 import stripHtml from 'string-strip-html';
 import './reusable-global-components';
+import VCommentsChunk from './components/pages/Post/VCommentsChunk';
+
+// make component global to allow recursion
+Vue.component('VCommentsChunk', VCommentsChunk);
 
 Vue.use(VueTruncate);
 Vue.use(fragment);
@@ -24,7 +28,10 @@ declare module 'vue/types/vue' {
         callback?: (payload?: any) => void,
       ) => void | Promise<void>;
       $emit: (eventName: string, payload?: any) => void | Promise<void>;
-      $off: (eventName: string, funToOff?: Function) => void | Promise<void>;
+      $off: (
+        eventName: string,
+        callbackToOff?: Function,
+      ) => void | Promise<void>;
     };
     $moment: () => string;
     $stripHtml: () => string;

@@ -22,8 +22,11 @@
       </div>
     </div>
     <div class="user__inner">
-      <VCard class="user__about">
-        <template v-if="user.about || (actionsData.length > 0 && false)">
+      <VCard
+        v-if="user.about || (actionsData.length > 0 && false)"
+        class="user__about"
+      >
+        <template>
           <span class="user__about-title">About me</span>
           <p class="user__about-text">
             {{ $stripHtml(user.about || '...') }}
@@ -267,7 +270,7 @@
       display: flex;
       flex-direction: column;
       padding: 0 15px;
-      background-color: $block-orange-dark;
+      background-color: $bg-orange-dark;
     }
 
     .user__avatar {
@@ -275,7 +278,8 @@
     }
 
     .user__about {
-      border-radius: 0 0 3px 3px;
+      // setting this to hide shadow from upper block
+      position: relative;
     }
 
     &__username {
@@ -291,7 +295,7 @@
       align-items: center;
       justify-content: space-around;
       padding: 20px 15px;
-      background-color: $block-orange;
+      background-color: $bg-orange;
       border-radius: 3px 3px 0 0;
       box-shadow: rgba($shadow, 0.14) 0 2px 2px 0,
         rgba($shadow, 0.2) 0 3px 1px -2px, rgba($shadow, 0.12) 0 1px 5px 0;

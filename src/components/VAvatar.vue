@@ -2,7 +2,7 @@
 <template>
   <div class="avatar">
     <img
-      src="~@/assets/img/decorations/avatars/working-table.png"
+      src="~@/assets/img/demo/avatars/working-table.png"
       alt="user avatar"
     >
   </div>
@@ -21,7 +21,7 @@
     width: 160px;
     height: 160px;
     overflow: hidden;
-    background-color: $block-grey-dark;
+    background-color: $bg-grey-dark;
     border: 3px solid $border-grey;
     border-radius: 50%;
     box-shadow: rgba($shadow, 0.14) 0 6px 10px 0,

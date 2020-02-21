@@ -40,7 +40,7 @@
     height: 100%;
     color: $text-grey-light;
     font-family: $font-roboto-slab;
-    background-color: $block-grey;
+    background-color: $bg-grey;
   }
 
   .app {

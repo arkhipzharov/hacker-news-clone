@@ -5,7 +5,7 @@
     @click.prevent="optionalHref"
   >
     <img
-      src="@/assets/img/decorations/posts/sky.jpg"
+      src="@/assets/img/demo/posts/sky.jpg"
       :alt="alt"
     >
   </a>

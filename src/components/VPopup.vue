@@ -103,7 +103,7 @@
       z-index: 10002;
       width: 100%;
       height: 100%;
-      background-color: rgba($block-black, 0.5);
+      background-color: rgba($bg-black, 0.5);
     }
 
     &__backdrop-inner {

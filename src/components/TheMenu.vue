@@ -3,7 +3,7 @@
   <div class="menu">
     <div class="menu__header">
       <img
-        src="@/assets/img/decorations/menu-header.png"
+        src="@/assets/img/bg/menu-header.png"
         class="menu__header-image"
         alt="paper mountains"
       >
@@ -91,7 +91,7 @@
     z-index: 10001;
     width: 300px;
     height: 100%;
-    background-color: $block-grey-dark;
+    background-color: $bg-grey-dark;
     transform: translateX(-100%);
     transition: transform 0.3s;
     will-change: transform;
@@ -122,7 +122,7 @@
       display: flex;
       height: 50px;
       padding: 0 20px;
-      background-color: rgba($block-black, 0.5);
+      background-color: rgba($bg-black, 0.5);
     }
 
     &__header-search-input {

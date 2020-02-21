@@ -7,8 +7,9 @@ $black: #000000;
 $grey: #1b1d1e;
 $grey-dark: #181a1b;
 $grey-light: #252729;
-$grey-x-light: #aeaaaf;
-$grey-xx-light: #efd7cf;
+$grey-x-light: #393939;
+$grey-xx-light: #aeaaaf;
+$grey-xxx-light: #efd7cf;
 
 $orange: #ae3611;
 $orange-dark: #591e0d;
@@ -30,28 +31,30 @@ $purple: #802090;
 
 $text-white: $white;
 
-$text-grey-light: $grey-x-light;
-$text-grey-x-light: $grey-xx-light;
+$text-grey-light: $grey-xx-light;
+$text-grey-x-light: $grey-xxx-light;
 
 $text-orange-pink: $orange-pink;
 
 // Blocks
 
-$block-black: $black;
+$bg-black: $black;
 
-$block-grey: $grey;
-$block-grey-dark: $grey-dark;
+$bg-grey: $grey;
+$bg-grey-dark: $grey-dark;
+$bg-grey-light: $grey-x-light;
 
-$block-orange: $orange;
-$block-orange-dark: $orange-dark;
+$bg-orange: $orange;
+$bg-orange-dark: $orange-dark;
 
-$block-purple: $purple;
+$bg-purple: $purple;
 
-$block-blue: $blue-dark;
+$bg-blue: $blue-dark;
 
 // Borders
 
 $border-grey: $grey-light;
+$border-grey-light: $grey-x-light;
 
 // Shadows
 

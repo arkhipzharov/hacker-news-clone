@@ -9,7 +9,7 @@ import baseConfig from './webpack.base';
 const config: webpack.Configuration = {
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: './js/main.[hash].js',
+    filename: 'main.[hash].js',
   },
   performance: {
     // to not show warnings about too big bundle size
@@ -61,7 +61,6 @@ const config: webpack.Configuration = {
               // webpack build script is not running if path is specified with
               // path.resolve, so it's like this
               outputPath: 'assets/fonts',
-              publicPath: '../../assets/fonts',
               // preserve name in bundle
               name: '[name].[ext]',
             },
@@ -107,7 +106,7 @@ const config: webpack.Configuration = {
   plugins: [
     new MiniCssExtractPlugin({
       // change bundled css filename
-      filename: './styles/style.[hash].css',
+      filename: 'style.[hash].css',
     }),
     new CleanWebpackPlugin(),
   ],

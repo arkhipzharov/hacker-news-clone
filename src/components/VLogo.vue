@@ -33,7 +33,7 @@
       height: 35px;
       margin-right: 10px;
       color: $text-orange-pink;
-      background-color: $block-grey-dark;
+      background-color: $bg-grey-dark;
       border-radius: 50%;
     }
 
