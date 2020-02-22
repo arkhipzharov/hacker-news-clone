@@ -1,8 +1,11 @@
 # Hacker news clone
 
-This is a [pet project](http://lime-test.h1n.ru/hacker-news-clone/#/) trying to
-be like [hacker-news.news](https://www.hacker-news.news) for better learning
-typescript, how to work with api, and so on
+This is a [pet project](http://lime-test.h1n.ru/hacker-news-clone) trying to
+be like [hacker-news.news](https://www.hacker-news.news) which is using hacker
+news api introduced by [ycombinator](https://news.ycombinator.com). Main
+features is that all edge cases except connection interrupt in data loading is
+covered and you can safely return to previous pages and continue exploring
+content
 
 ## 📥 Setup
 

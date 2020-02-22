@@ -15,7 +15,14 @@
           target="_blank"
         >
           hacker-news.news
-        </a> for better learning typescript, how to work with api, and so on
+        </a> which is using hacker news api introduced by <a
+          href="https://news.ycombinator.com"
+          target="_blank"
+        >
+          ycombinator
+        </a>. Main features is that all edge cases except connection interrupt
+        in data loading is covered and you can safely return to previous pages
+        and continue exploring content
       </p>
       <p class="about__text">
         Github: <a

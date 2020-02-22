@@ -133,6 +133,10 @@
       display: flex;
       justify-content: space-between;
       height: 100%;
+
+      @media (min-width: $break-tablet) {
+        padding: 0 15px;
+      }
     }
 
     &__logo {

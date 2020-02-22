@@ -166,6 +166,7 @@
 
     &__inner {
       @include page-width-media;
+      padding: 0 15px;
     }
 
     .wall__post {

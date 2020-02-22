@@ -308,6 +308,7 @@
 
     &__inner {
       @include page-width-media;
+      padding: 0 15px;
     }
 
     .post__post {

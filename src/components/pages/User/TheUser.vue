@@ -276,6 +276,7 @@
       @include page-width-media;
       display: flex;
       flex-direction: column;
+      padding: 0 15px;
     }
 
     .user__avatar {
@@ -331,6 +332,7 @@
 
     &__about-and-comments {
       @include page-width-media;
+      padding: 0 15px;
     }
 
     &__about-title {
