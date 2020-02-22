@@ -1,7 +1,7 @@
 <!-- eslint-disable prettier/prettier -->
 <template>
   <div class="wall-post">
-    <VCard class="wall-post__wall-post">
+    <VCard class="wall-post__wall-post card--responsive">
       <VImage
         class="wall-post__image"
         :href="data.url"

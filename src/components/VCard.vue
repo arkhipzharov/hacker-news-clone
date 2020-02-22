@@ -86,6 +86,12 @@
       padding: 20px;
       font-size: 15px;
       line-height: 26px;
+
+      @at-root .card--responsive > & {
+        @media (min-width: $break-tablet) {
+          padding: 40px;
+        }
+      }
     }
 
     &__underline-decorator {

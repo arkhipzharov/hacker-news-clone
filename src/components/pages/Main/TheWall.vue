@@ -5,6 +5,7 @@
       isGroup
       :name="'zoom'"
       :duration="600"
+      class="wall__inner"
     >
       <VWallPost
         v-for="data in postsData"
@@ -161,9 +162,11 @@
 
 <style lang="scss">
   .wall {
-    height: (calc(100% - 39px));
     margin-top: 40px;
-    padding: 0 15px;
+
+    &__inner {
+      @include page-width-media;
+    }
 
     .wall__post {
       margin-bottom: 40px;

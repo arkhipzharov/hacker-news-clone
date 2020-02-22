@@ -95,6 +95,7 @@
   .popup {
     position: relative;
     width: 100%;
+    max-width: 500px;
 
     &__backdrop {
       position: fixed;
@@ -109,6 +110,7 @@
     &__backdrop-inner {
       display: flex;
       align-items: center;
+      justify-content: center;
       height: 100%;
       padding: 0 20px;
     }

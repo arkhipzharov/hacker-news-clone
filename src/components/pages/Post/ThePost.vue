@@ -1,66 +1,68 @@
 <!-- eslint-disable prettier/prettier -->
 <template>
   <div class="post">
-    <VCard
-      class="post__post"
-      :isUnderlineExist="false"
-    >
-      <a
-        class="post__title"
-        :href="data.url"
-        target="_blank"
+    <div class="post__inner">
+      <VCard
+        class="post__post card--responsive"
+        :isUnderlineExist="false"
       >
-        {{ data.title || '...' }}
-      </a>
-      <span class="post__url">{{ data.url }}</span>
-      <VImage
-        :href="data.url"
-        :alt="'post image'"
-      />
-      <p
-        v-if="data.text"
-        class="post__text"
+        <a
+          class="post__title"
+          :href="data.url"
+          target="_blank"
+        >
+          {{ data.title || '...' }}
+        </a>
+        <span class="post__url">{{ data.url }}</span>
+        <VImage
+          :href="data.url"
+          :alt="'post image'"
+        />
+        <p
+          v-if="data.text"
+          class="post__text"
+        >
+          {{ $stripHtml(data.text) }}
+        </p>
+        <VButton
+          v-if="data.url"
+          class="post__go-to-original-button"
+          :href="data.url"
+        >
+          ORIGINAL POST
+        </VButton>
+      </VCard>
+      <VCard
+        class="post__by card--comment-by"
+        :isUnderlineExist="false"
       >
-        {{ $stripHtml(data.text) }}
-      </p>
-      <VButton
-        v-if="data.url"
-        class="post__go-to-original-button"
-        :href="data.url"
-      >
-        ORIGINAL POST
-      </VButton>
-    </VCard>
-    <VCard
-      class="post__by card--comment-by"
-      :isUnderlineExist="false"
-    >
-      <template v-slot:header>
-        <div class="post__by-header">
-          <router-link
-            :to="`/user/${data.by}`"
-            class="post__by-username"
-          >
-            {{ data.by || '...' }}
-          </router-link>
-          <span class="post__by-karma">
-            {{ `Karma: ${userKarma || '...'}` }}
-          </span>
-        </div>
-      </template>
-      <template v-slot:default>
-        <div class="post__by-bottom-space">
-          <VAvatar class="post__by-avatar" />
-        </div>
-      </template>
-    </VCard>
-    <span class="post__comments-title">Comments</span>
-    <div class="post__comments">
-      <TheComments :children="commentsTreeData" />
-      <TheInfiniteLoading
-        :loadFun="loadCommentsTreeDataBranch"
-        :noDataText="'comments'"
-      />
+        <template v-slot:header>
+          <div class="post__by-header">
+            <router-link
+              :to="`/user/${data.by}`"
+              class="post__by-username"
+            >
+              {{ data.by || '...' }}
+            </router-link>
+            <span class="post__by-karma">
+              {{ `Karma: ${userKarma || '...'}` }}
+            </span>
+          </div>
+        </template>
+        <template v-slot:default>
+          <div class="post__by-bottom-space">
+            <VAvatar class="post__by-avatar" />
+          </div>
+        </template>
+      </VCard>
+      <span class="post__comments-title">Comments</span>
+      <div class="post__comments">
+        <TheComments :children="commentsTreeData" />
+        <TheInfiniteLoading
+          :loadFun="loadCommentsTreeDataBranch"
+          :noDataText="'comments'"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -303,7 +305,10 @@
   .post {
     flex: 1 1 0;
     margin-top: 40px;
-    padding: 0 15px;
+
+    &__inner {
+      @include page-width-media;
+    }
 
     .post__post {
       margin-bottom: 20px;

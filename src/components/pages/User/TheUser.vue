@@ -2,36 +2,38 @@
 <template>
   <div class="user">
     <div class="user__account-info">
-      <VAvatar class="user__avatar" />
-      <span class="user__username">{{ user && user.id || '...' }}</span>
-      <div class="user__karma-and-created-timestamp">
-        <div class="user__karma-and-created-timestamp-item">
-          <span>{{ user.karma || '...' }}</span>
-          <span>Karma</span>
-        </div>
-        <div class="user__karma-and-created-timestamp-item">
-          <span>
-            {{
-              user.created
-                ? $moment(unixToDate(user.created)).format('YYYY-MM-DD')
-                : '...'
-            }}
-          </span>
-          <span>Created</span>
+      <div class="user__account-info-inner">
+        <VAvatar class="user__avatar" />
+        <span class="user__username">{{ user && user.id || '...' }}</span>
+        <div class="user__karma-and-created-timestamp">
+          <div class="user__karma-and-created-timestamp-inner">
+            <div class="user__karma-and-created-timestamp-item">
+              <span>{{ user.karma || '...' }}</span>
+              <span>Karma</span>
+            </div>
+            <div class="user__karma-and-created-timestamp-item">
+              <span>
+                {{
+                  user.created
+                    ? $moment(unixToDate(user.created)).format('YYYY-MM-DD')
+                    : '...'
+                }}
+              </span>
+              <span>Created</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    <div class="user__inner">
+    <div class="user__about-and-comments">
       <VCard
         v-if="user.about || (actionsData.length > 0 && false)"
         class="user__about"
       >
-        <template>
-          <span class="user__about-title">About me</span>
-          <p class="user__about-text">
-            {{ $stripHtml(user.about || '...') }}
-          </p>
-        </template>
+        <span class="user__about-title">About me</span>
+        <p class="user__about-text">
+          {{ $stripHtml(user.about || '...') }}
+        </p>
       </VCard>
       <span class="user__actions-title">Recent Activity</span>
       <VTransition
@@ -267,10 +269,13 @@
     flex: 1 1 0;
 
     &__account-info {
+      background-color: $bg-orange-dark;
+    }
+
+    &__account-info-inner {
+      @include page-width-media;
       display: flex;
       flex-direction: column;
-      padding: 0 15px;
-      background-color: $bg-orange-dark;
     }
 
     .user__avatar {
@@ -291,14 +296,20 @@
     }
 
     &__karma-and-created-timestamp {
-      display: flex;
-      align-items: center;
-      justify-content: space-around;
       padding: 20px 15px;
       background-color: $bg-orange;
       border-radius: 3px 3px 0 0;
       box-shadow: rgba($shadow, 0.14) 0 2px 2px 0,
         rgba($shadow, 0.2) 0 3px 1px -2px, rgba($shadow, 0.12) 0 1px 5px 0;
+    }
+
+    &__karma-and-created-timestamp-inner {
+      display: flex;
+      justify-content: space-around;
+      width: 100%;
+      max-width: 320px;
+      height: 100%;
+      margin: 0 auto;
     }
 
     &__karma-and-created-timestamp-item {
@@ -318,8 +329,8 @@
       }
     }
 
-    &__inner {
-      padding: 0 15px;
+    &__about-and-comments {
+      @include page-width-media;
     }
 
     &__about-title {

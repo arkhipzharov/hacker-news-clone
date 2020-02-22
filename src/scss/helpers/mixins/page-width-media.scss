@@ -1,0 +1,12 @@
+@mixin page-width-media() {
+  margin: 0 auto;
+  padding: 0 15px;
+
+  @media (min-width: $break-tablet) {
+    width: 720px;
+  }
+
+  @media (min-width: $break-pc) {
+    width: 960px;
+  }
+}

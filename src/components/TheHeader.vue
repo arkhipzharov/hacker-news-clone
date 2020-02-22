@@ -7,13 +7,15 @@
   -->
   <fragment>
     <header class="header">
-      <VLogo />
-      <button
-        class="header__toggle-menu-button"
-        @click="toggleMenu(false)"
-      >
-        <VIcon :href="'menu'" />
-      </button>
+      <div class="header__inner">
+        <VLogo class="header__logo" />
+        <button
+          class="header__toggle-menu-button"
+          @click="toggleMenu(false)"
+        >
+          <VIcon :href="'menu'" />
+        </button>
+      </div>
     </header>
     <TheMenu
       v-on-clickaway="() => toggleMenu(true)"
@@ -121,13 +123,23 @@
     top: 0;
     left: 0;
     z-index: 10000;
-    display: flex;
-    justify-content: space-between;
     width: 100%;
-    min-width: 320px;
     height: 50px;
     background-color: $bg-orange;
     box-shadow: rgba($shadow, 0.22) 0 3px 3px;
+
+    &__inner {
+      @include page-width-media;
+      display: flex;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    &__logo {
+      @media (min-width: $break-tablet) {
+        margin-left: -10px;
+      }
+    }
 
     &__toggle-menu-button {
       display: flex;
@@ -135,6 +147,10 @@
       justify-content: center;
       width: 50px;
       height: 100%;
+
+      @media (min-width: $break-tablet) {
+        margin-right: -14px;
+      }
 
       > svg {
         width: 17.72px;

@@ -31,6 +31,14 @@
     display: block;
     height: 170px;
 
+    @media (min-width: $break-tablet) {
+      height: 343px;
+    }
+
+    @media (min-width: $break-pc) {
+      height: 400px;
+    }
+
     > img {
       width: 100%;
       height: 100%;
