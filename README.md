@@ -9,7 +9,7 @@ content
 
 ## 📥 Setup
 
-1. `git clone https://github.com/shiftenko/hacker-news-clone`
+1. `git clone https://github.com/arkhipzharov/hacker-news-clone`
 2. `npm install`
 
 > Type checking for all files except unit tests is launched along with commands
