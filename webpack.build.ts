@@ -108,7 +108,13 @@ const config: webpack.Configuration = {
       // change bundled css filename
       filename: 'style.[hash].css',
     }),
-    new CleanWebpackPlugin(),
+    new CleanWebpackPlugin({
+      cleanOnceBeforeBuildPatterns: [
+        // this plugin was removing .git file created by git worktree, .git
+        // file is needed for git worktree to work in specific folder
+        '!dist/.git',
+      ],
+    }),
   ],
 };
 
