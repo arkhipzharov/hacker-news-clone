@@ -1,6 +1,6 @@
 # Hacker news clone
 
-This is a [pet project](http://lime-test.h1n.ru/hacker-news-clone) trying to
+This is a [pet project](https://arkhipzharov.github.io/hacker-news-clone/) trying to
 be like [hacker-news.news](https://www.hacker-news.news) which is using hacker
 news api introduced by [ycombinator](https://news.ycombinator.com). Main
 features is that all edge cases except connection interrupt in data loading is
