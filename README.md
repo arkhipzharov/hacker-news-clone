@@ -9,8 +9,9 @@ content
 
 ## 📥 Setup
 
-1. `git clone https://github.com/arkhipzharov/hacker-news-clone`
-2. `npm install`
+1. `git clone https://github.com/arkhipzharov/med-form`
+2. `npm i`
+3. `git worktree add dist gh-pages`
 
 > Type checking for all files except unit tests is launched along with commands
 > `npm run build` and `npm run dev`
@@ -21,8 +22,15 @@ content
 
 ## 🌐 Production
 
+> You can read more about this approach
+[here](https://medium.com/linagora-engineering/deploying-your-js-app-to-github-pages-the-easy-way-or-not-1ef8c48424b7)
+
 1. `npm run build`
-2. Upload files from dist folder on hosting
+2. `cd dist`
+3. `git add .`
+4. `git commit`
+5. `git push origin gh-pages`
+6. wait a bit and check updates [here](https://arkhipzharov.github.io/hacker-news-clone/)
 
 ## ✅ Run unit tests
 
