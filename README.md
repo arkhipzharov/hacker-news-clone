@@ -9,7 +9,7 @@ content
 
 ## 📥 Setup
 
-1. `git clone https://github.com/arkhipzharov/med-form`
+1. `git clone https://github.com/arkhipzharov/hacker-news-clone`
 2. `npm i`
 3. `git worktree add dist gh-pages`
 
