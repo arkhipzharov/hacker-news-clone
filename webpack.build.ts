@@ -113,7 +113,7 @@ const config: webpack.Configuration = {
       // for deploying build files to github pages, and without that file
       // worktree functionality not working
       // https://medium.com/linagora-engineering/deploying-your-js-app-to-github-pages-the-easy-way-or-not-1ef8c48424b7
-      cleanOnceBeforeBuildPatterns: ['**/*', '!.git'],
+      cleanOnceBeforeBuildPatterns: ['!.git'],
     }),
   ],
 };

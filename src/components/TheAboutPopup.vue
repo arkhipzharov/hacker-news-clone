@@ -26,10 +26,10 @@
       </p>
       <p class="about__text">
         Github: <a
-          href="https://github.com/shiftenko/hacker-news-clone"
+          href="https://github.com/arkhipzharov/hacker-news-clone"
           target="_blank"
         >
-          github.com/shiftenko/hacker-news-clone
+          github.com/arkhipzharov/hacker-news-clone
         </a>
       </p>
     </template>
